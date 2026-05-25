@@ -1,107 +1,73 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-// Floating glass navigation bar pinned over the bottom of the dashboard.
-class FloatingNavigationBar extends StatelessWidget {
-  const FloatingNavigationBar({super.key});
+class FloatingNavigation extends StatefulWidget {
+  const FloatingNavigation({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: 18,
-      right: 18,
-      bottom: 24,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
-          child: Container(
-            height: 72,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFF171129).withValues(alpha: 0.88),
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x40171129),
-                  blurRadius: 30,
-                  offset: Offset(0, 18),
-                ),
-              ],
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                NavItem(icon: Icons.home_rounded, label: 'Home', active: true),
-                NavItem(icon: Icons.calendar_today_rounded, label: 'Schedule'),
-                NavItem(icon: Icons.task_alt_rounded, label: 'Tasks'),
-                NavItem(icon: Icons.leaderboard_rounded, label: 'Ranks'),
-                NavItem(icon: Icons.person_rounded, label: 'Profile'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  State<FloatingNavigation> createState() => _FloatingNavigationState();
 }
 
-// One item inside the floating bottom navigation bar.
-class NavItem extends StatelessWidget {
-  const NavItem({
-    required this.icon,
-    required this.label,
-    this.active = false,
-    super.key,
-  });
+class _FloatingNavigationState extends State<FloatingNavigation> {
+  int selectedIndex = 0;
 
-  final IconData icon;
-  final String label;
-  final bool active;
+  // Updated icons:
+  // Home, Grades, Balance, Attendance, Schedule
+  final List<IconData> navIcons = [
+    Icons.home_rounded, // Home
+    Icons.assessment_rounded, // Grades
+    Icons.monetization_on_rounded, // Balance
+    Icons.how_to_reg_rounded, // Attendance
+    Icons.calendar_month_rounded, // Schedule
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 58,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 220),
-            width: active ? 44 : 38,
-            height: active ? 34 : 30,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: active
-                  ? const LinearGradient(
-                      colors: [Color(0xFF8D5BFF), Color(0xFFFF8A3D)],
-                    )
-                  : null,
-            ),
-            child: Icon(
-              icon,
-              color: active
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.55),
-              size: 22,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: active
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.55),
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(navIcons.length, (index) {
+          final isSelected = selectedIndex == index;
+
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 6),
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? const Color.fromARGB(255, 191, 226, 255)
+                    : const Color.fromARGB(0, 0, 0, 0),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                navIcons[index],
+                color: isSelected
+                    ? const Color.fromARGB(255, 0, 170, 255)
+                    : Colors.grey,
+                size: 28,
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

@@ -15,26 +15,7 @@ class CustomNavBar extends StatelessWidget {
         child: Container(
           height: 80,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 12),
-          decoration: BoxDecoration(
-            color: const Color(
-              0xFFF7FBFF,
-            ).withValues(alpha: 0.35), // Transparent Ice White
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.white.withValues(alpha: 0.25),
-                width: 1.5,
-              ),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(
-                  0xFF5DAEFF,
-                ).withValues(alpha: 0.08), // Soft sky blue shadow
-                blurRadius: 20,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+
           child: SafeArea(
             bottom: false,
             top: false,
@@ -60,8 +41,11 @@ class CustomNavBar extends StatelessWidget {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(
-                              0xFF5DAEFF,
+                            color: const Color.fromARGB(
+                              255,
+                              255,
+                              255,
+                              255,
                             ).withValues(alpha: 0.3),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
@@ -74,8 +58,7 @@ class CustomNavBar extends StatelessWidget {
                           shape: BoxShape.circle,
                           color: Colors.white,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
+                        child: ClipOval(
                           child: Image.network(
                             'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
                             fit: BoxFit.cover,
@@ -106,6 +89,15 @@ class CustomNavBar extends StatelessWidget {
                       children: [
                         const SizedBox(height: 2),
                         const Text(
+                          'Hello,',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 80, 80, 80),
+                          ),
+                        ),
+                        const Text(
                           'Sarah Jenkins',
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -125,10 +117,25 @@ class CustomNavBar extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFF5DAEFF).withValues(
-                          alpha: 0.15,
+                        color: const Color.fromARGB(
+                          255,
+                          255,
+                          255,
+                          255,
                         ), // Primary Blue transparent tint
-                        shape: BoxShape.circle,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(
+                              255,
+                              146,
+                              146,
+                              146,
+                            ).withValues(alpha: 0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: IconButton(
                         icon: const Icon(

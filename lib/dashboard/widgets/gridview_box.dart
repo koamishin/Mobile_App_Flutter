@@ -12,7 +12,7 @@ class GridviewBox extends StatelessWidget {
     ],
     [
       'Balance',
-      Icons.account_balance_wallet_rounded,
+      Icons.monetization_on_rounded,
       [Color.fromARGB(255, 81, 179, 170), Color.fromARGB(255, 73, 192, 182)],
     ],
     [
@@ -79,43 +79,64 @@ class GridviewBox extends StatelessWidget {
                 ),
               ),
 
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(item[1] as IconData, color: Colors.white, size: 70),
-                    const SizedBox(height: 12),
-                    Text(
-                      item[0] as String,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
 
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('View'),
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                          ),
-                          minimumSize: const Size.fromHeight(48),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          // gradient: gradient,
+                          color: Colors.white.withValues(alpha: .15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          item[1] as IconData,
+                          color: Colors.white,
+                          size: 70,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 12),
+                      Text(
+                        item[0] as String,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      const SizedBox(height: 5),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            textStyle: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                            ),
+                            minimumSize: const Size.fromHeight(48),
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                          ),
+                          child: const Text('View'),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

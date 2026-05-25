@@ -7,13 +7,14 @@ class GreetingBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      height: 250,
+      padding: const EdgeInsets.all(36),
       decoration: BoxDecoration(
         image: const DecorationImage(
           image: AssetImage('assets/img/bg-greetings.png'),
           fit: BoxFit.cover,
         ),
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(40),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF2563EB).withValues(alpha: 0.25),
@@ -65,7 +66,7 @@ class GreetingBox extends StatelessWidget {
                       'Welcome back,\nSarah! 👋',
                       style: const TextStyle(
                         fontFamily: 'Emberly',
-                        fontSize: 42,
+                        fontSize: 48,
                         height: 1.1,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
@@ -78,7 +79,7 @@ class GreetingBox extends StatelessWidget {
                       'Keep up the excellent work!\nYou have 4 classes and\n2 assignments due today.',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 15,
+                        fontSize: 16,
                         height: 1.6,
                         fontWeight: FontWeight.w400,
                         color: Colors.white.withValues(alpha: 0.88),
