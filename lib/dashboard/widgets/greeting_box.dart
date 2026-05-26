@@ -8,7 +8,7 @@ class GreetingBox extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 250,
-      padding: const EdgeInsets.all(36),
+      padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         image: const DecorationImage(
           image: AssetImage('assets/img/bg-greetings.png'),
@@ -23,10 +23,8 @@ class GreetingBox extends StatelessWidget {
           ),
         ],
       ),
-
       child: Stack(
         children: [
-          // Decorative circles
           Positioned(
             top: -40,
             right: -30,
@@ -39,7 +37,6 @@ class GreetingBox extends StatelessWidget {
               ),
             ),
           ),
-
           Positioned(
             bottom: -60,
             left: -40,
@@ -52,35 +49,30 @@ class GreetingBox extends StatelessWidget {
               ),
             ),
           ),
-
-          // Content
           Row(
             children: [
-              // LEFT SIDE
               Expanded(
                 flex: 6,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Welcome back,\nSarah! 👋',
-                      style: const TextStyle(
+                    const Text(
+                      'Welcome back,\nSarah!',
+                      style: TextStyle(
                         fontFamily: 'Emberly',
-                        fontSize: 48,
+                        fontSize: 40,
                         height: 1.1,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
                       ),
                     ),
-
-                    const SizedBox(height: 18),
-
+                    const SizedBox(height: 14),
                     Text(
                       'Keep up the excellent work!\nYou have 4 classes and\n2 assignments due today.',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 16,
-                        height: 1.6,
+                        fontSize: 14,
+                        height: 1.45,
                         fontWeight: FontWeight.w400,
                         color: Colors.white.withValues(alpha: 0.88),
                       ),
@@ -88,10 +80,7 @@ class GreetingBox extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(width: 10),
-
-              // RIGHT SIDE GRAPHIC
             ],
           ),
         ],

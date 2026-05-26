@@ -1,69 +1,85 @@
 import 'package:flutter/material.dart';
 
-class FloatingNavigation extends StatefulWidget {
-  const FloatingNavigation({super.key});
+class FloatingNavigation extends StatelessWidget {
+  const FloatingNavigation({
+    required this.selectedIndex,
+    required this.onItemSelected,
+    super.key,
+  });
 
-  @override
-  State<FloatingNavigation> createState() => _FloatingNavigationState();
-}
+  final int selectedIndex;
+  final ValueChanged<int> onItemSelected;
 
-class _FloatingNavigationState extends State<FloatingNavigation> {
-  int selectedIndex = 0;
-
-  // Updated icons:
-  // Home, Grades, Balance, Attendance, Schedule
-  final List<IconData> navIcons = [
-    Icons.home_rounded, // Home
-    Icons.assessment_rounded, // Grades
-    Icons.monetization_on_rounded, // Balance
-    Icons.how_to_reg_rounded, // Attendance
-    Icons.calendar_month_rounded, // Schedule
+  static const List<_NavigationItem> _items = [
+    _NavigationItem(icon: Icons.home_rounded, label: 'Home'),
+    _NavigationItem(icon: Icons.assessment_rounded, label: 'Grades'),
+    _NavigationItem(icon: Icons.monetization_on_rounded, label: 'Balance'),
+    _NavigationItem(icon: Icons.how_to_reg_rounded, label: 'Attend'),
+    _NavigationItem(icon: Icons.calendar_month_rounded, label: 'Schedule'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withValues(alpha: 0.96),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: const Color(0xFF2F80ED).withValues(alpha: 0.18),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
           ),
         ],
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(navIcons.length, (index) {
+        children: List.generate(_items.length, (index) {
+          final item = _items[index];
           final isSelected = selectedIndex == index;
 
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 20),
-              margin: const EdgeInsets.symmetric(horizontal: 6),
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color.fromARGB(255, 191, 226, 255)
-                    : const Color.fromARGB(0, 0, 0, 0),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(
-                navIcons[index],
-                color: isSelected
-                    ? const Color.fromARGB(255, 0, 170, 255)
-                    : Colors.grey,
-                size: 28,
+          return Expanded(
+            child: GestureDetector(
+              key: ValueKey('nav-${item.label.toLowerCase()}'),
+              onTap: () => onItemSelected(index),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOut,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xFFDDF0FF)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(22),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      item.icon,
+                      color: isSelected
+                          ? const Color(0xFF2F80ED)
+                          : const Color(0xFF9AA8B8),
+                      size: 26,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      item.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: isSelected
+                            ? const Color(0xFF2F80ED)
+                            : const Color(0xFF9AA8B8),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -71,4 +87,11 @@ class _FloatingNavigationState extends State<FloatingNavigation> {
       ),
     );
   }
+}
+
+class _NavigationItem {
+  const _NavigationItem({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
 }

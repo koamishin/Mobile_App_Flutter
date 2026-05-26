@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GridviewBox extends StatelessWidget {
-  const GridviewBox({super.key});
+  const GridviewBox({required this.onItemSelected, super.key});
+
+  final ValueChanged<int> onItemSelected;
 
   final items = const [
     [
@@ -9,21 +11,25 @@ class GridviewBox extends StatelessWidget {
 
       Icons.assessment_rounded,
       [Color.fromARGB(255, 182, 140, 255), Color(0xFFA269FF)],
+      1,
     ],
     [
       'Balance',
       Icons.monetization_on_rounded,
       [Color.fromARGB(255, 81, 179, 170), Color.fromARGB(255, 73, 192, 182)],
+      2,
     ],
     [
       'Attendance',
       Icons.how_to_reg_rounded,
       [Color(0xFFFFAE82), Color(0xFFF77E4E)],
+      3,
     ],
     [
       'Schedule',
       Icons.calendar_month_rounded,
       [Color.fromARGB(255, 111, 155, 250), Color.fromARGB(255, 125, 125, 255)],
+      4,
     ],
   ];
 
@@ -45,6 +51,8 @@ class GridviewBox extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         );
+        final title = item[0] as String;
+        final pageIndex = item[3] as int;
 
         return Container(
           decoration: BoxDecoration(
@@ -106,7 +114,7 @@ class GridviewBox extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        item[0] as String,
+                        title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
@@ -119,7 +127,8 @@ class GridviewBox extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          key: ValueKey('home-view-${title.toLowerCase()}'),
+                          onPressed: () => onItemSelected(pageIndex),
                           style: ElevatedButton.styleFrom(
                             textStyle: const TextStyle(
                               fontFamily: 'Poppins',
