@@ -18,24 +18,25 @@ class DailyScheduleTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (classes.isEmpty) {
-      return _buildEmptyState();
+      return _buildEmptyState(context);
     }
 
     final mockNow = DateTime(2026, 5, 26, 13, 15, 29); // Consistent with current class
     final currentClass = scheduleService.getCurrentClass(mockNow);
+    final scheme = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 4, bottom: 12),
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
           child: Text(
             'Timeline Schedule',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF27364A),
+              color: scheme.onSurface,
             ),
           ),
         ),
@@ -72,7 +73,7 @@ class DailyScheduleTimeline extends StatelessWidget {
                         height: 24,
                         color: index == 0
                             ? Colors.transparent
-                            : const Color(0xFF2F80ED).withValues(alpha: 0.3),
+                            : scheme.primary.withValues(alpha: 0.3),
                       ),
                       // Dot Node
                       AnimatedContainer(
@@ -80,16 +81,17 @@ class DailyScheduleTimeline extends StatelessWidget {
                         width: 14,
                         height: 14,
                         decoration: BoxDecoration(
-                          color: isActive ? const Color(0xFF27AE60) : Colors.white,
+                          color: isActive ? const Color(0xFF27AE60) : scheme.surface,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isActive ? Colors.white : schedule.color,
+                            color: isActive ? scheme.surface : schedule.color,
                             width: isActive ? 2.5 : 3,
                           ),
                           boxShadow: isActive
                               ? [
                                   BoxShadow(
-                                    color: const Color(0xFF27AE60).withValues(alpha: 0.5),
+                                    color: const Color(0xFF27AE60)
+                                        .withValues(alpha: 0.5),
                                     blurRadius: 8,
                                     spreadRadius: 2,
                                   )
@@ -103,7 +105,7 @@ class DailyScheduleTimeline extends StatelessWidget {
                           width: 3,
                           color: isLast
                               ? Colors.transparent
-                              : const Color(0xFF2F80ED).withValues(alpha: 0.3),
+                              : scheme.primary.withValues(alpha: 0.3),
                         ),
                       ),
                     ],
@@ -135,39 +137,40 @@ class DailyScheduleTimeline extends StatelessWidget {
     return '$hour:$minute $period';
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.08),
+            color: scheme.shadow.withValues(alpha: 0.12),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
-        children: const [
+        children: [
           Icon(
             Icons.event_busy_rounded,
             size: 58,
-            color: Color(0xFF8696A8),
+            color: scheme.onSurfaceVariant,
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
           Text(
             'No Classes Scheduled',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF26364A),
+              color: scheme.onSurface,
             ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
             'Enjoy your free day! Relax or catch up on homework.',
             textAlign: TextAlign.center,
@@ -175,7 +178,7 @@ class DailyScheduleTimeline extends StatelessWidget {
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF66778A),
+              color: scheme.onSurfaceVariant,
             ),
           ),
         ],

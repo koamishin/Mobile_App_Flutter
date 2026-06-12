@@ -49,7 +49,9 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
     final year = _currentMonth.year;
     final month = _currentMonth.month;
     final daysCount = _daysInMonth(_currentMonth);
-    final firstDayOfWeek = DateTime(year, month, 1).weekday % 7; // 0 = Sunday, 6 = Saturday
+    final firstDayOfWeek =
+        DateTime(year, month, 1).weekday % 7; // 0 = Sunday, 6 = Saturday
+    final scheme = Theme.of(context).colorScheme;
 
     // Generate calendar cell list
     final List<DateTime?> cells = [];
@@ -73,11 +75,11 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
     return Container(
       margin: const EdgeInsets.only(bottom: 22),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.14),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -92,19 +94,22 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Academic Calendar',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF26364A),
+                    color: scheme.onSurface,
                   ),
                 ),
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.chevron_left_rounded, color: Color(0xFF2F80ED)),
+                      icon: Icon(
+                        Icons.chevron_left_rounded,
+                        color: scheme.primary,
+                      ),
                       onPressed: _previousMonth,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -112,16 +117,19 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                     const SizedBox(width: 8),
                     Text(
                       monthLabel,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF2F80ED),
+                        color: scheme.primary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.chevron_right_rounded, color: Color(0xFF2F80ED)),
+                      icon: Icon(
+                        Icons.chevron_right_rounded,
+                        color: scheme.primary,
+                      ),
                       onPressed: _nextMonth,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -134,20 +142,22 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
             // Days of the week row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-                  .map((d) => SizedBox(
-                        width: 32,
-                        child: Text(
-                          d,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF8696A8),
-                          ),
+              children: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+                  .map(
+                    (d) => SizedBox(
+                      width: 32,
+                      child: Text(
+                        d,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: scheme.onSurfaceVariant,
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
             const SizedBox(height: 8),
@@ -188,14 +198,14 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                     duration: const Duration(milliseconds: 200),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? const Color(0xFF2F80ED)
+                          ? scheme.primary
                           : (isCurrentToday
-                              ? const Color(0xFF2F80ED).withValues(alpha: 0.1)
+                              ? scheme.primary.withValues(alpha: 0.12)
                               : Colors.transparent),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: isCurrentToday && !isSelected
-                            ? const Color(0xFF2F80ED)
+                            ? scheme.primary
                             : Colors.transparent,
                         width: 1.5,
                       ),
@@ -212,10 +222,10 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                                 ? FontWeight.w800
                                 : FontWeight.w600,
                             color: isSelected
-                                ? Colors.white
+                                ? scheme.onPrimary
                                 : (isCurrentToday
-                                    ? const Color(0xFF2F80ED)
-                                    : const Color(0xFF26364A)),
+                                    ? scheme.primary
+                                    : scheme.onSurface),
                           ),
                         ),
                         if (dayEvents.isNotEmpty) ...[
@@ -228,7 +238,9 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                                 width: 4,
                                 height: 4,
                                 decoration: BoxDecoration(
-                                  color: isSelected ? Colors.white : e.color,
+                                  color: isSelected
+                                      ? scheme.onPrimary
+                                      : e.color,
                                   shape: BoxShape.circle,
                                 ),
                               );
@@ -244,34 +256,38 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
             // Events list section below calendar if selected day has events
             if (selectedEvents.isNotEmpty) ...[
               const SizedBox(height: 18),
-              const Divider(color: Color(0xFFE2EBF6), height: 1),
+              Divider(color: scheme.outlineVariant, height: 1),
               const SizedBox(height: 14),
-              const Text(
+              Text(
                 'Schedule Events',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF26364A),
+                  color: scheme.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
-              ...selectedEvents.map((e) => _buildEventItem(e)),
+              ...selectedEvents.map((e) => _buildEventItem(e, scheme)),
             ] else ...[
               const SizedBox(height: 14),
-              const Divider(color: Color(0xFFE2EBF6), height: 1),
+              Divider(color: scheme.outlineVariant, height: 1),
               const SizedBox(height: 12),
               Row(
-                children: const [
-                  Icon(Icons.calendar_today_rounded, size: 14, color: Color(0xFF8696A8)),
-                  SizedBox(width: 6),
+                children: [
+                  Icon(
+                    Icons.calendar_today_rounded,
+                    size: 14,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 6),
                   Text(
                     'No exams or holidays on this date.',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF8696A8),
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -283,7 +299,7 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
     );
   }
 
-  Widget _buildEventItem(AcademicEvent event) {
+  Widget _buildEventItem(AcademicEvent event, ColorScheme scheme) {
     String typeLabel = 'Event';
     if (event.type == AcademicEventType.exam) typeLabel = 'Exam Schedule';
     if (event.type == AcademicEventType.holiday) typeLabel = 'School Holiday';
@@ -292,10 +308,10 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: event.color.withValues(alpha: 0.08),
+        color: event.color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: event.color.withValues(alpha: 0.15),
+          color: event.color.withValues(alpha: 0.20),
           width: 1.5,
         ),
       ),
@@ -305,7 +321,7 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: event.color.withValues(alpha: 0.12),
+              color: event.color.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(event.icon, color: event.color, size: 18),
@@ -317,21 +333,21 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
               children: [
                 Text(
                   event.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF26364A),
+                    color: scheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   event.description,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF66778A),
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -341,7 +357,7 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: event.color.withValues(alpha: 0.12),
+              color: event.color.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(

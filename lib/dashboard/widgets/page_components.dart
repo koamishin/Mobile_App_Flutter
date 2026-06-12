@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Background scaffold used by every sub-page (Grades, Account, Attendance,
+/// Schedule, Preferences). Honors the active theme via [ColorScheme].
 class StudentPageScaffold extends StatelessWidget {
   const StudentPageScaffold({
     required this.title,
@@ -16,20 +18,21 @@ class StudentPageScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
-      color: const Color(0xFFCFE8FF),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(20, 22, 20, 120),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PageHeader(title: title, subtitle: subtitle, icon: icon),
-              const SizedBox(height: 22),
-              ...children,
-            ],
-          ),
+      color: scheme.surface,
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        // Top padding accounts for the shared header in DashboardShell.
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 120),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // The shared top header in DashboardShell already shows the
+            // title/subtitle for this page, so we skip the old PageHeader
+            // card to keep the layout consistent across all pages.
+            ...children,
+          ],
         ),
       ),
     );
@@ -50,14 +53,15 @@ class PageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.82),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.14),
+            color: scheme.shadow.withValues(alpha: 0.18),
             blurRadius: 24,
             offset: const Offset(0, 14),
           ),
@@ -69,12 +73,12 @@ class PageHeader extends StatelessWidget {
             width: 58,
             height: 58,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF5DAEFF), Color(0xFF7B61FF)],
+              gradient: LinearGradient(
+                colors: [scheme.primary, scheme.tertiary],
               ),
               borderRadius: BorderRadius.circular(22),
             ),
-            child: Icon(icon, color: Colors.white, size: 30),
+            child: Icon(icon, color: scheme.onPrimary, size: 30),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -83,22 +87,22 @@ class PageHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF27364A),
+                    color: scheme.onSurface,
                     height: 1,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF637387),
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -188,15 +192,16 @@ class SoftInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.14),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -208,10 +213,10 @@ class SoftInfoCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFFE7F4FF),
+              color: scheme.primaryContainer,
               borderRadius: BorderRadius.circular(18),
             ),
-            child: Icon(icon, color: const Color(0xFF2F80ED)),
+            child: Icon(icon, color: scheme.onPrimaryContainer),
           ),
           const SizedBox(width: 14),
           Expanded(
@@ -220,21 +225,21 @@ class SoftInfoCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF26364A),
+                    color: scheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF66778A),
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
               ],

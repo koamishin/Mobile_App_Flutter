@@ -340,6 +340,7 @@ class _AttendancePageState extends State<AttendancePage> {
     bool isSelected,
     AttendanceRecord record,
   ) {
+    final scheme = Theme.of(context).colorScheme;
     final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     final dayName = dayNames[date.weekday - 1];
 
@@ -397,7 +398,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 BoxShadow(
                   color: isSelected
                       ? const Color(0xFF6D5DFB).withValues(alpha: 0.35)
-                      : const Color(0xFF4B8BD6).withValues(alpha: 0.08),
+                      : scheme.shadow.withValues(alpha: 0.08),
                   blurRadius: isSelected ? 12 : 8,
                   offset: isSelected ? const Offset(0, 6) : const Offset(0, 4),
                 ),
@@ -542,6 +543,7 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildSummaryStatItem(String label, String value) {
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -561,7 +563,7 @@ class _AttendancePageState extends State<AttendancePage> {
             fontFamily: 'Poppins',
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Colors.white.withValues(alpha: 0.8),
+            color: scheme.surface,
           ),
         ),
       ],
@@ -569,6 +571,7 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildDetailCard() {
+    final scheme = Theme.of(context).colorScheme;
     final record =
         _attendanceRecords[DateTime(
           _selectedDate.year,
@@ -620,11 +623,11 @@ class _AttendancePageState extends State<AttendancePage> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -797,15 +800,16 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildSubjectAttendanceSection() {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -885,15 +889,16 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildCalendarSection() {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -1064,6 +1069,7 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildHistorySection() {
+    final scheme = Theme.of(context).colorScheme;
     // Generate static list of past records for display
     final historyDates = [
       DateTime(2026, 5, 26),
@@ -1077,11 +1083,11 @@ class _AttendancePageState extends State<AttendancePage> {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -1233,15 +1239,16 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildMonthlyStatisticsSection() {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),

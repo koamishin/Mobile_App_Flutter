@@ -53,6 +53,7 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
   Widget build(BuildContext context) {
     final currentClass = widget.scheduleService.getCurrentClass(_mockNow);
     final upcomingClass = widget.scheduleService.getUpcomingClass(_mockNow);
+    final scheme = Theme.of(context).colorScheme;
 
     if (currentClass == null && upcomingClass == null) {
       return const SizedBox.shrink();
@@ -64,21 +65,21 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          const Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 10),
             child: Text(
               'Current Session',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF27364A),
+                color: scheme.onSurface,
               ),
             ),
           ),
           currentClass != null
               ? _buildCurrentClassView(currentClass, upcomingClass)
-              : _buildOnlyUpcomingView(upcomingClass!),
+              : _buildOnlyUpcomingView(context, upcomingClass!),
         ],
       ),
     );
@@ -286,15 +287,16 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
     );
   }
 
-  Widget _buildOnlyUpcomingView(ClassSchedule upcoming) {
+  Widget _buildOnlyUpcomingView(BuildContext context, ClassSchedule upcoming) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.14),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -310,14 +312,14 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE7F4FF),
+                    color: scheme.primaryContainer,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text(
+                  child: Text(
                     'SCHOOL SESSIONS DONE',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: Color(0xFF2F80ED),
+                      color: scheme.onPrimaryContainer,
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                     ),
@@ -326,27 +328,27 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
               ],
             ),
             const SizedBox(height: 14),
-            const Text(
+            Text(
               'No Active Classes Right Now',
               style: TextStyle(
                 fontFamily: 'Poppins',
-                color: Color(0xFF26364A),
+                color: scheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
+            Text(
               'All classes for today are complete. Rest up and prepare for your next sessions.',
               style: TextStyle(
                 fontFamily: 'Poppins',
-                color: Color(0xFF66778A),
+                color: scheme.onSurfaceVariant,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 14),
-            const Divider(color: Color(0xFFE2EBF6), height: 1),
+            Divider(color: scheme.outlineVariant, height: 1),
             const SizedBox(height: 14),
             Row(
               children: [
@@ -354,7 +356,7 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                   width: 42,
                   height: 42,
                   decoration: BoxDecoration(
-                    color: upcoming.color.withValues(alpha: 0.12),
+                    color: upcoming.color.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(upcoming.icon, color: upcoming.color, size: 20),
@@ -364,20 +366,20 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'NEXT UPCOMING SESSION',
                         style: TextStyle(
                           fontFamily: 'Poppins',
-                          color: Color(0xFF66778A),
+                          color: scheme.onSurfaceVariant,
                           fontSize: 9,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                       Text(
                         '${upcoming.subjectName} (${upcoming.roomNumber})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
-                          color: Color(0xFF26364A),
+                          color: scheme.onSurface,
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                         ),
@@ -397,11 +399,11 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Tomorrow',
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        color: Color(0xFF66778A),
+                        color: scheme.onSurfaceVariant,
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
                       ),

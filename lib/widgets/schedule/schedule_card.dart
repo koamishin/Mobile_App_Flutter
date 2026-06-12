@@ -15,13 +15,14 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final isBreak = schedule.subjectName == 'Break Time';
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: isActive ? 0.95 : 0.82),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: isActive ? schedule.color : Colors.transparent,
@@ -30,8 +31,8 @@ class ScheduleCard extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: isActive
-                ? schedule.color.withValues(alpha: 0.28)
-                : const Color(0xFF4B8BD6).withValues(alpha: 0.08),
+                ? schedule.color.withValues(alpha: 0.32)
+                : scheme.shadow.withValues(alpha: 0.12),
             blurRadius: isActive ? 22 : 14,
             offset: const Offset(0, 8),
           ),
@@ -77,7 +78,7 @@ class ScheduleCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: schedule.color.withValues(alpha: 0.12),
+                                color: schedule.color.withValues(alpha: 0.16),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
@@ -109,7 +110,8 @@ class ScheduleCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF27AE60).withValues(alpha: 0.12),
+                                  color: const Color(0xFF27AE60)
+                                      .withValues(alpha: 0.16),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: const Row(
@@ -138,46 +140,46 @@ class ScheduleCard extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           schedule.subjectName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF26364A),
+                            color: scheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
                         if (!isBreak) ...[
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.person_outline_rounded,
                                 size: 14,
-                                color: Color(0xFF66778A),
+                                color: scheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.teacherName,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF66778A),
+                                  color: scheme.onSurfaceVariant,
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Icon(
+                              Icon(
                                 Icons.location_on_outlined,
                                 size: 14,
-                                color: Color(0xFF66778A),
+                                color: scheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.roomNumber,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF66778A),
+                                  color: scheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -185,19 +187,19 @@ class ScheduleCard extends StatelessWidget {
                         ] else ...[
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.restaurant_rounded,
                                 size: 14,
-                                color: Color(0xFF66778A),
+                                color: scheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.roomNumber,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF66778A),
+                                  color: scheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -212,7 +214,7 @@ class ScheduleCard extends StatelessWidget {
                               fontSize: 11,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w500,
-                              color: schedule.color.withValues(alpha: 0.8),
+                              color: schedule.color.withValues(alpha: 0.85),
                             ),
                           ),
                         ]
@@ -227,27 +229,27 @@ class ScheduleCard extends StatelessWidget {
                     children: [
                       Text(
                         schedule.timeRangeString.split(' - ').first,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFF26364A),
+                          color: scheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 2),
-                      const Icon(
+                      Icon(
                         Icons.arrow_downward_rounded,
                         size: 14,
-                        color: Color(0xFF8696A8),
+                        color: scheme.onSurfaceVariant,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         schedule.timeRangeString.split(' - ').last,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF66778A),
+                          color: scheme.onSurfaceVariant,
                         ),
                       ),
                     ],

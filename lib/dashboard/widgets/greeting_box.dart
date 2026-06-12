@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class GreetingBox extends StatelessWidget {
-  const GreetingBox({super.key});
+  const GreetingBox({
+    this.userName = 'Sarah',
+    this.summary = 'Keep up the excellent work!\nYou have 4 classes and\n2 assignments due today.',
+    super.key,
+  });
+
+  final String userName;
+  final String summary;
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +63,9 @@ class GreetingBox extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Welcome back,\nSarah!',
-                      style: TextStyle(
+                    Text(
+                      'Welcome back,\n$userName!',
+                      style: const TextStyle(
                         fontFamily: 'Emberly',
                         fontSize: 40,
                         height: 1.1,
@@ -68,7 +75,7 @@ class GreetingBox extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      'Keep up the excellent work!\nYou have 4 classes and\n2 assignments due today.',
+                      summary,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,

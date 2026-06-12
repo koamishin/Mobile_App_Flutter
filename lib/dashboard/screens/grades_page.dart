@@ -406,6 +406,7 @@ class GradeLevelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     // Determine unique premium color scheme for each grade icon
     final Color themeColor;
     switch (history.gradeName) {
@@ -428,11 +429,11 @@ class GradeLevelCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.1),
             blurRadius: 18,
             offset: const Offset(0, 10),
           ),
@@ -521,10 +522,10 @@ class GradeLevelCard extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Divider(
+                        Divider(
                           height: 1,
                           thickness: 1,
-                          color: Color(0xFFE2EBF6),
+                          color: scheme.outlineVariant,
                           indent: 18,
                           endIndent: 18,
                         ),
@@ -532,7 +533,7 @@ class GradeLevelCard extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
                           child: Column(
                             children: history.semesters
-                                .map((sem) => _buildSemesterView(sem, themeColor))
+                                .map((sem) => _buildSemesterView(context, sem, themeColor))
                                 .toList(),
                           ),
                         ),
@@ -552,7 +553,8 @@ class GradeLevelCard extends StatelessWidget {
     return (total / history.semesters.length).toStringAsFixed(1);
   }
 
-  Widget _buildSemesterView(SemesterHistory sem, Color themeColor) {
+  Widget _buildSemesterView(BuildContext context, SemesterHistory sem, Color themeColor) {
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -571,7 +573,7 @@ class GradeLevelCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFE7F4FF),
+                color: scheme.primaryContainer,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -587,13 +589,14 @@ class GradeLevelCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        ...sem.subjects.map((sub) => _buildSubjectRow(sub)),
+        ...sem.subjects.map((sub) => _buildSubjectRow(context, sub)),
         const SizedBox(height: 14),
       ],
     );
   }
 
-  Widget _buildSubjectRow(SubjectGrade sub) {
+  Widget _buildSubjectRow(BuildContext context, SubjectGrade sub) {
+    final scheme = Theme.of(context).colorScheme;
     final isPassed = sub.remarks.toLowerCase() == 'passed';
     final remarksColor = isPassed ? const Color(0xFF27AE60) : const Color(0xFFEB5757);
     final remarksBg = isPassed ? const Color(0xFFEBF7EE) : const Color(0xFFFDF0F0);
@@ -602,9 +605,9 @@ class GradeLevelCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.6),
+        color: scheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEAF0F6), width: 1),
+        border: Border.all(color: scheme.outlineVariant, width: 1),
       ),
       child: Row(
         children: [

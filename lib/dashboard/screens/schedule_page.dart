@@ -81,13 +81,14 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildViewSwitcher() {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.6),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: const Color(0xFF2F80ED).withValues(alpha: 0.08),
+          color: scheme.primary.withValues(alpha: 0.12),
           width: 1.5,
         ),
       ),
@@ -101,8 +102,8 @@ class _SchedulePageState extends State<SchedulePage> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   gradient: _currentTab == 0
-                      ? const LinearGradient(
-                          colors: [Color(0xFF2F80ED), Color(0xFF5DAEFF)],
+                      ? LinearGradient(
+                          colors: [scheme.primary, scheme.tertiary],
                         )
                       : null,
                   color: _currentTab == 0 ? null : Colors.transparent,
@@ -110,9 +111,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   boxShadow: _currentTab == 0
                       ? [
                           BoxShadow(
-                            color: const Color(
-                              0xFF2F80ED,
-                            ).withValues(alpha: 0.2),
+                            color: scheme.primary.withValues(alpha: 0.24),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -127,8 +126,8 @@ class _SchedulePageState extends State<SchedulePage> {
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: _currentTab == 0
-                        ? Colors.white
-                        : const Color(0xFF66778A),
+                        ? scheme.onPrimary
+                        : scheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -143,8 +142,8 @@ class _SchedulePageState extends State<SchedulePage> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
                   gradient: _currentTab == 1
-                      ? const LinearGradient(
-                          colors: [Color(0xFF2F80ED), Color(0xFF5DAEFF)],
+                      ? LinearGradient(
+                          colors: [scheme.primary, scheme.tertiary],
                         )
                       : null,
                   color: _currentTab == 1 ? null : Colors.transparent,
@@ -152,9 +151,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   boxShadow: _currentTab == 1
                       ? [
                           BoxShadow(
-                            color: const Color(
-                              0xFF2F80ED,
-                            ).withValues(alpha: 0.2),
+                            color: scheme.primary.withValues(alpha: 0.24),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -169,8 +166,8 @@ class _SchedulePageState extends State<SchedulePage> {
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: _currentTab == 1
-                        ? Colors.white
-                        : const Color(0xFF66778A),
+                        ? scheme.onPrimary
+                        : scheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -182,57 +179,58 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildSubjectProgressSection() {
+    final scheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
-          padding: EdgeInsets.only(left: 4, bottom: 12, top: 12),
+          padding: const EdgeInsets.only(left: 4, bottom: 12, top: 12),
           child: Text(
             'Subject Progress',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF27364A),
+              color: scheme.onSurface,
             ),
           ),
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'Programming',
           progress: 0.94,
           color: Color(0xFF5DAEFF),
           icon: Icons.computer_rounded,
           statusText: '15/16 lectures complete • Midterm passed',
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'Mathematics',
           progress: 0.82,
           color: Color(0xFF6D5DFB),
           icon: Icons.calculate_rounded,
           statusText: '13/16 lectures complete • Exam complete',
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'English',
           progress: 0.75,
           color: Color(0xFF2F80ED),
           icon: Icons.menu_book_rounded,
           statusText: '12/16 lectures complete • Essay draft done',
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'Science Lab',
           progress: 0.68,
           color: Color(0xFFFF8E53),
           icon: Icons.science_rounded,
           statusText: '11/16 lectures complete • 3 lab reports complete',
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'History',
           progress: 0.56,
           color: Color(0xFF32A89D),
           icon: Icons.history_edu_rounded,
           statusText: '9/16 lectures complete • Mapping project due',
         ),
-        SubjectProgressIndicator(
+        const SubjectProgressIndicator(
           subjectName: 'Robotics Club',
           progress: 0.88,
           color: Color(0xFF51B3AA),

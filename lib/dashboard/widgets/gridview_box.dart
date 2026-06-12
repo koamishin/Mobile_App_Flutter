@@ -8,7 +8,6 @@ class GridviewBox extends StatelessWidget {
   final items = const [
     [
       'Grades',
-
       Icons.assessment_rounded,
       [Color.fromARGB(255, 182, 140, 255), Color(0xFFA269FF)],
       1,
@@ -39,10 +38,13 @@ class GridviewBox extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
+      // Explicit aspect ratio so cards have enough vertical room for
+      // icon + title + "View" button without overflowing.
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 14,
         mainAxisSpacing: 14,
+        childAspectRatio: 0.82,
       ),
       itemBuilder: (_, i) {
         final item = items[i];
@@ -66,89 +68,100 @@ class GridviewBox extends StatelessWidget {
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              ...[
-                [-20.0, -20.0, 54.0, .15],
-                [-6.0, -32.0, 48.0, .10],
-                [-34.0, 12.0, 40.0, .06],
-              ].map(
-                (e) => Positioned(
-                  top: e[0],
-                  left: e[1],
-                  child: Container(
-                    width: e[2],
-                    height: e[2],
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withValues(alpha: e[3]),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Stack(
+              children: [
+                // Decorative bubbles
+                ...[
+                  [-20.0, -20.0, 54.0, .15],
+                  [-6.0, -32.0, 48.0, .10],
+                  [-34.0, 12.0, 40.0, .06],
+                ].map(
+                  (e) => Positioned(
+                    top: e[0],
+                    left: e[1],
+                    child: Container(
+                      width: e[2],
+                      height: e[2],
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: e[3]),
+                      ),
                     ),
                   ),
                 ),
-              ),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-
+                // Content — uses a Column with mainAxisAlignment.spaceBetween
+                // so children self-distribute within the available height
+                // (defined by childAspectRatio) and never overflow.
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 14, 12, 12),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Top: icon
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 5,
-                          vertical: 5,
-                        ),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          // gradient: gradient,
                           color: Colors.white.withValues(alpha: .15),
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         child: Icon(
                           item[1] as IconData,
                           color: Colors.white,
-                          size: 70,
+                          size: 42,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      const SizedBox(height: 5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: ElevatedButton(
-                          key: ValueKey('home-view-${title.toLowerCase()}'),
-                          onPressed: () => onItemSelected(pageIndex),
-                          style: ElevatedButton.styleFrom(
-                            textStyle: const TextStyle(
+                      // Bottom: title + button
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
                               fontFamily: 'Poppins',
-                              fontSize: 16,
-                            ),
-                            minimumSize: const Size.fromHeight(48),
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              height: 1.1,
                             ),
                           ),
-                          child: const Text('View'),
-                        ),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              key: ValueKey(
+                                'home-view-${title.toLowerCase()}',
+                              ),
+                              onPressed: () => onItemSelected(pageIndex),
+                              style: ElevatedButton.styleFrom(
+                                textStyle: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                minimumSize: const Size.fromHeight(40),
+                                padding: EdgeInsets.zero,
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text('View'),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

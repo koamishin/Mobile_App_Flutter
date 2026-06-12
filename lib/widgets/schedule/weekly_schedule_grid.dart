@@ -22,6 +22,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
     final mockNow = DateTime(2026, 5, 26, 13, 15, 29); // Tue May 26, 2026
     final currentDayOfWeek = mockNow.weekday; // Tuesday = 2
     final activeClass = scheduleService.getCurrentClass(mockNow);
+    final scheme = Theme.of(context).colorScheme;
 
     final days = [
       {'num': 1, 'label': 'Mon', 'date': '25'},
@@ -35,11 +36,11 @@ class WeeklyScheduleGrid extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 22),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.88),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.1),
+            color: scheme.shadow.withValues(alpha: 0.14),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -53,15 +54,15 @@ class WeeklyScheduleGrid extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header title
-              const Padding(
-                padding: EdgeInsets.fromLTRB(18, 18, 18, 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 10),
                 child: Text(
                   'Weekly Timetable',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF26364A),
+                    color: scheme.onSurface,
                   ),
                 ),
               ),
@@ -74,8 +75,8 @@ class WeeklyScheduleGrid extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 1. Time Column
-                      _buildTimeColumn(),
-                      const VerticalDivider(width: 1, color: Color(0xFFE2EBF6)),
+                      _buildTimeColumn(scheme),
+                      VerticalDivider(width: 1, color: scheme.outlineVariant),
                       // 2. Day Columns
                       ...days.map((day) {
                         final isCurrentDay = day['num'] == currentDayOfWeek;
@@ -83,13 +84,14 @@ class WeeklyScheduleGrid extends StatelessWidget {
                           children: [
                             _buildDayColumn(
                               context,
+                              scheme: scheme,
                               dayNum: day['num'] as int,
                               label: day['label'] as String,
                               date: day['date'] as String,
                               isCurrentDay: isCurrentDay,
                               activeClassId: activeClass?.id,
                             ),
-                            const VerticalDivider(width: 1, color: Color(0xFFE2EBF6)),
+                            VerticalDivider(width: 1, color: scheme.outlineVariant),
                           ],
                         );
                       }),
@@ -105,7 +107,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
   }
 
   // Draw vertical column for hourly times on left
-  Widget _buildTimeColumn() {
+  Widget _buildTimeColumn(ColorScheme scheme) {
     return Container(
       width: timeColumnWidth,
       padding: const EdgeInsets.only(top: 50), // alignment below day headers
@@ -122,11 +124,11 @@ class WeeklyScheduleGrid extends StatelessWidget {
             child: Text(
               '$displayHour:00\n$period',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF8696A8),
+                color: scheme.onSurfaceVariant,
                 height: 1.2,
               ),
             ),
@@ -139,6 +141,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
   // Draw day column containing stack of classes
   Widget _buildDayColumn(
     BuildContext context, {
+    required ColorScheme scheme,
     required int dayNum,
     required String label,
     required String date,
@@ -150,7 +153,9 @@ class WeeklyScheduleGrid extends StatelessWidget {
 
     return Container(
       width: dayColumnWidth,
-      color: isCurrentDay ? const Color(0xFF2F80ED).withValues(alpha: 0.04) : Colors.transparent,
+      color: isCurrentDay
+          ? scheme.primary.withValues(alpha: 0.06)
+          : Colors.transparent,
       child: Column(
         children: [
           // Day Column Header
@@ -160,11 +165,13 @@ class WeeklyScheduleGrid extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: isCurrentDay
-                  ? const Color(0xFF2F80ED).withValues(alpha: 0.1)
+                  ? scheme.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
               border: Border(
                 bottom: BorderSide(
-                  color: isCurrentDay ? const Color(0xFF2F80ED) : const Color(0xFFE2EBF6),
+                  color: isCurrentDay
+                      ? scheme.primary
+                      : scheme.outlineVariant,
                   width: isCurrentDay ? 2 : 1,
                 ),
               ),
@@ -178,7 +185,9 @@ class WeeklyScheduleGrid extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 11,
                     fontWeight: isCurrentDay ? FontWeight.w800 : FontWeight.w600,
-                    color: isCurrentDay ? const Color(0xFF2F80ED) : const Color(0xFF66778A),
+                    color: isCurrentDay
+                        ? scheme.primary
+                        : scheme.onSurfaceVariant,
                   ),
                 ),
                 Text(
@@ -187,7 +196,9 @@ class WeeklyScheduleGrid extends StatelessWidget {
                     fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: isCurrentDay ? const Color(0xFF2F80ED) : const Color(0xFF26364A),
+                    color: isCurrentDay
+                        ? scheme.primary
+                        : scheme.onSurface,
                   ),
                 ),
               ],
@@ -208,7 +219,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
                   left: 4,
                   right: 4,
                   height: height - 4, // tiny bottom margin
-                  child: _buildClassCell(context, c, isActive),
+                  child: _buildClassCell(context, scheme, c, isActive),
                 );
               }).toList(),
             ),
@@ -219,7 +230,12 @@ class WeeklyScheduleGrid extends StatelessWidget {
   }
 
   // Singular grid cell for a class block
-  Widget _buildClassCell(BuildContext context, ClassSchedule schedule, bool isActive) {
+  Widget _buildClassCell(
+    BuildContext context,
+    ColorScheme scheme,
+    ClassSchedule schedule,
+    bool isActive,
+  ) {
     final isBreak = schedule.subjectName == 'Break Time';
 
     return GestureDetector(
@@ -227,7 +243,9 @@ class WeeklyScheduleGrid extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isActive ? schedule.color : schedule.color.withValues(alpha: 0.16),
+          color: isActive
+              ? schedule.color
+              : schedule.color.withValues(alpha: 0.16),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: schedule.color,
@@ -236,7 +254,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: schedule.color.withValues(alpha: 0.24),
+                    color: schedule.color.withValues(alpha: 0.32),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   )
@@ -259,7 +277,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
                         fontFamily: 'Poppins',
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
-                        color: isActive ? Colors.white : const Color(0xFF26364A),
+                        color: isActive ? Colors.white : scheme.onSurface,
                         height: 1.1,
                       ),
                     ),
@@ -275,7 +293,9 @@ class WeeklyScheduleGrid extends StatelessWidget {
                   fontFamily: 'Poppins',
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
-                  color: isActive ? Colors.white70 : const Color(0xFF66778A),
+                  color: isActive
+                      ? Colors.white70
+                      : scheme.onSurfaceVariant,
                 ),
               ),
               Text(
@@ -297,15 +317,16 @@ class WeeklyScheduleGrid extends StatelessWidget {
   // Open details bottom sheet
   void _showClassDetailsSheet(BuildContext context, ClassSchedule schedule) {
     final isBreak = schedule.subjectName == 'Break Time';
+    final scheme = Theme.of(context).colorScheme;
 
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          decoration: BoxDecoration(
+            color: scheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
           ),
           padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
           child: Column(
@@ -318,7 +339,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
                   width: 48,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE2EBF6),
+                    color: scheme.outlineVariant,
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -331,7 +352,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: schedule.color.withValues(alpha: 0.12),
+                      color: schedule.color.withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Icon(schedule.icon, color: schedule.color, size: 26),
@@ -343,20 +364,20 @@ class WeeklyScheduleGrid extends StatelessWidget {
                       children: [
                         Text(
                           schedule.subjectName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
-                            color: Color(0xFF26364A),
+                            color: scheme.onSurface,
                           ),
                         ),
                         Text(
                           isBreak ? 'School Recess' : 'Official Course Session',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF66778A),
+                            color: scheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -367,14 +388,17 @@ class WeeklyScheduleGrid extends StatelessWidget {
               const SizedBox(height: 22),
               // Time and Duration
               _buildDetailRow(
+                context,
                 icon: Icons.access_time_rounded,
                 title: 'Time & Duration',
-                value: '${schedule.timeRangeString} (${schedule.durationHours} hrs)',
+                value:
+                    '${schedule.timeRangeString} (${schedule.durationHours} hrs)',
                 color: schedule.color,
               ),
               if (!isBreak) ...[
                 const SizedBox(height: 12),
                 _buildDetailRow(
+                  context,
                   icon: Icons.person_rounded,
                   title: 'Subject Instructor',
                   value: schedule.teacherName,
@@ -382,6 +406,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _buildDetailRow(
+                  context,
                   icon: Icons.location_on_rounded,
                   title: 'Class Room Number',
                   value: schedule.roomNumber,
@@ -390,6 +415,7 @@ class WeeklyScheduleGrid extends StatelessWidget {
               ] else ...[
                 const SizedBox(height: 12),
                 _buildDetailRow(
+                  context,
                   icon: Icons.restaurant_rounded,
                   title: 'Location Venue',
                   value: schedule.roomNumber,
@@ -398,9 +424,12 @@ class WeeklyScheduleGrid extends StatelessWidget {
               ],
               const SizedBox(height: 12),
               _buildDetailRow(
+                context,
                 icon: Icons.sticky_note_2_rounded,
                 title: 'Session Note / Remarks',
-                value: schedule.notes.isNotEmpty ? schedule.notes : 'No extra session notes added.',
+                value: schedule.notes.isNotEmpty
+                    ? schedule.notes
+                    : 'No extra session notes added.',
                 color: schedule.color,
               ),
               const SizedBox(height: 24),
@@ -411,7 +440,8 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2F80ED),
+                    backgroundColor: scheme.primary,
+                    foregroundColor: scheme.onPrimary,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -421,7 +451,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                     'Close Details',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: Colors.white,
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),
@@ -435,16 +464,18 @@ class WeeklyScheduleGrid extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow({
+  Widget _buildDetailRow(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String value,
     required Color color,
   }) {
+    final scheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: const Color(0xFF66778A)),
+        Icon(icon, size: 18, color: scheme.onSurfaceVariant),
         const SizedBox(width: 10),
         Expanded(
           child: Column(
@@ -452,21 +483,21 @@ class WeeklyScheduleGrid extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF66778A),
+                  color: scheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF26364A),
+                  color: scheme.onSurface,
                 ),
               ),
             ],

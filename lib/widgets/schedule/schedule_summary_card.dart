@@ -11,20 +11,21 @@ class ScheduleSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 4, bottom: 12),
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 12),
             child: Text(
               'Daily Overview',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF27364A),
+                color: scheme.onSurface,
               ),
             ),
           ),

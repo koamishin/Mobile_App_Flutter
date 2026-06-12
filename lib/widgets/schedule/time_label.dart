@@ -12,11 +12,12 @@ class TimeLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isActive
-            ? const Color(0xFF2F80ED).withValues(alpha: 0.1)
+            ? scheme.primary.withValues(alpha: 0.14)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(10),
       ),
@@ -26,7 +27,7 @@ class TimeLabel extends StatelessWidget {
           fontFamily: 'Poppins',
           fontSize: 13,
           fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-          color: isActive ? const Color(0xFF2F80ED) : const Color(0xFF8696A8),
+          color: isActive ? scheme.primary : scheme.onSurfaceVariant,
         ),
       ),
     );

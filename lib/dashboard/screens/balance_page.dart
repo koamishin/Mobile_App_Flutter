@@ -54,6 +54,7 @@ class _TuitionSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(26),
@@ -139,7 +140,7 @@ class _TuitionSummaryCard extends StatelessWidget {
             'Next payment due on June 5, 2026',
             style: TextStyle(
               fontFamily: 'Poppins',
-              color: Colors.white.withValues(alpha: 0.88),
+              color: scheme.surface,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
@@ -183,14 +184,15 @@ class _PaymentMethodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.12),
+            color: scheme.shadow.withValues(alpha: 0.12),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),

@@ -13,15 +13,16 @@ class ClassTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final isBreak = schedule.subjectName == 'Break Time';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.72),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: schedule.color.withValues(alpha: 0.15),
+          color: schedule.color.withValues(alpha: 0.20),
           width: 1.5,
         ),
       ),
@@ -49,11 +50,11 @@ class ClassTile extends StatelessWidget {
                   children: [
                     Text(
                       schedule.subjectName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF26364A),
+                        color: scheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -61,11 +62,11 @@ class ClassTile extends StatelessWidget {
                       isBreak
                           ? schedule.roomNumber
                           : '${schedule.teacherName} • ${schedule.roomNumber}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF66778A),
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -78,20 +79,20 @@ class ClassTile extends StatelessWidget {
                 children: [
                   Text(
                     schedule.timeRangeString.split(' - ').first,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF2F80ED),
+                      color: scheme.primary,
                     ),
                   ),
                   Text(
                     schedule.timeRangeString.split(' - ').last,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF66778A),
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
                 ],

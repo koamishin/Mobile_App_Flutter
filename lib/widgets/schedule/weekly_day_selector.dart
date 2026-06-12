@@ -16,42 +16,43 @@ class WeeklyDaySelector extends StatelessWidget {
       'dayNum': 1,
       'name': 'Mon',
       'date': '25',
-      'indicator': '📚 5 Subj',
+      'indicator': '5 Subj',
     },
     {
       'dayNum': 2,
       'name': 'Tue',
       'date': '26', // Current day in mock context
-      'indicator': '📚 4 Subj',
+      'indicator': '4 Subj',
     },
     {
       'dayNum': 3,
       'name': 'Wed',
       'date': '27',
-      'indicator': '📚 4 Subj',
+      'indicator': '4 Subj',
     },
     {
       'dayNum': 4,
       'name': 'Thu',
       'date': '28',
-      'indicator': '📚 4 Subj',
+      'indicator': '4 Subj',
     },
     {
       'dayNum': 5,
       'name': 'Fri',
       'date': '29',
-      'indicator': '📚 4 Subj',
+      'indicator': '4 Subj',
     },
     {
       'dayNum': 6,
       'name': 'Sat',
       'date': '30',
-      'indicator': '📚 2 Subj',
+      'indicator': '2 Subj',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       height: 98,
       margin: const EdgeInsets.only(bottom: 18),
@@ -72,27 +73,27 @@ class WeeklyDaySelector extends StatelessWidget {
             width: 78,
             decoration: BoxDecoration(
               gradient: isSelected
-                  ? const LinearGradient(
-                      colors: [Color(0xFF5DAEFF), Color(0xFF7B61FF)],
+                  ? LinearGradient(
+                      colors: [scheme.primary, scheme.tertiary],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
                   : null,
-              color: isSelected
-                  ? null
-                  : Colors.white.withValues(alpha: isToday ? 0.95 : 0.82),
+              color: isSelected ? null : scheme.surface,
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
                 color: isSelected
                     ? Colors.transparent
-                    : (isToday ? const Color(0xFF2F80ED).withValues(alpha: 0.6) : Colors.transparent),
+                    : (isToday
+                        ? scheme.primary.withValues(alpha: 0.6)
+                        : Colors.transparent),
                 width: isToday ? 2 : 1,
               ),
               boxShadow: [
                 BoxShadow(
                   color: isSelected
-                      ? const Color(0xFF7B61FF).withValues(alpha: 0.28)
-                      : const Color(0xFF4B8BD6).withValues(alpha: 0.08),
+                      ? scheme.primary.withValues(alpha: 0.35)
+                      : scheme.shadow.withValues(alpha: 0.12),
                   blurRadius: isSelected ? 16 : 10,
                   offset: isSelected ? const Offset(0, 6) : const Offset(0, 4),
                 ),
@@ -114,10 +115,14 @@ class WeeklyDaySelector extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                          fontWeight: isSelected
+                              ? FontWeight.w800
+                              : FontWeight.w600,
                           color: isSelected
-                              ? Colors.white
-                              : (isToday ? const Color(0xFF2F80ED) : const Color(0xFF66778A)),
+                              ? scheme.onPrimary
+                              : (isToday
+                                  ? scheme.primary
+                                  : scheme.onSurfaceVariant),
                         ),
                       ),
                       // Date Number (e.g. 26)
@@ -127,9 +132,7 @@ class WeeklyDaySelector extends StatelessWidget {
                           fontFamily: 'Poppins',
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
-                          color: isSelected
-                              ? Colors.white
-                              : const Color(0xFF26364A),
+                          color: isSelected ? scheme.onPrimary : scheme.onSurface,
                         ),
                       ),
                       // Indicator chip
@@ -138,7 +141,7 @@ class WeeklyDaySelector extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: isSelected
                               ? Colors.white.withValues(alpha: 0.22)
-                              : const Color(0xFFE7F4FF),
+                              : scheme.primaryContainer,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -148,8 +151,8 @@ class WeeklyDaySelector extends StatelessWidget {
                             fontSize: 8,
                             fontWeight: FontWeight.w800,
                             color: isSelected
-                                ? Colors.white
-                                : const Color(0xFF2F80ED),
+                                ? scheme.onPrimary
+                                : scheme.onPrimaryContainer,
                           ),
                         ),
                       ),

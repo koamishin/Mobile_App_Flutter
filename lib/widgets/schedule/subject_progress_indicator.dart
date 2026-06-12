@@ -18,15 +18,16 @@ class SubjectProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.8),
+        color: scheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4B8BD6).withValues(alpha: 0.06),
+            color: scheme.shadow.withValues(alpha: 0.10),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -42,7 +43,7 @@ class SubjectProgressIndicator extends StatelessWidget {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.12),
+                  color: color.withValues(alpha: 0.16),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -54,21 +55,21 @@ class SubjectProgressIndicator extends StatelessWidget {
                   children: [
                     Text(
                       subjectName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF26364A),
+                        color: scheme.onSurface,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       statusText,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF66778A),
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -92,7 +93,7 @@ class SubjectProgressIndicator extends StatelessWidget {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
+              color: color.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(10),
             ),
             child: FractionallySizedBox(
