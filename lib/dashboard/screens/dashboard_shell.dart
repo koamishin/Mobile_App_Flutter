@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/floating_navigation_bar.dart';
 import '../widgets/navbar_top.dart';
+import '../widgets/notifications_sheet.dart';
 import '../widgets/profile_drawer.dart';
 import 'attendance_page.dart';
 import 'balance_page.dart';
@@ -141,6 +142,7 @@ class _DashboardShellState extends State<DashboardShell>
                   title: currentTab.title,
                   subtitle: currentTab.subtitle,
                   onAvatarTap: _openProfileDrawer,
+                  onNotificationTap: _openNotificationsSheet,
                   showBackButton: _pushedRouteCount > 0,
                   onBackPressed: _popPushedRoute,
                 ),
@@ -202,6 +204,12 @@ class _DashboardShellState extends State<DashboardShell>
     } else {
       Navigator.of(context).maybePop();
     }
+  }
+
+  /// Opens the notifications bottom sheet from the bell icon in the
+  /// top header. The sheet manages its own read/unread + filter state.
+  Future<void> _openNotificationsSheet() async {
+    await NotificationsSheet.show(context);
   }
 
   Future<void> _openProfileDrawer() async {

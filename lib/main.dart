@@ -5,22 +5,29 @@ import 'package:flutter/material.dart';
 import 'dashboard/screens/dashboard_shell.dart';
 import 'services/preferences_service.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  // Ensures the Flutter engine is ready before we touch any plugins
+  // (required by shared_preferences on cold start).
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load all persisted preferences from disk. The service is fully
+  // hydrated before the first frame so every screen sees the user's
+  // saved choices from the very beginning.
+  final prefs = await PreferencesService.load();
+
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({required this.prefs, super.key});
+
+  final PreferencesService prefs;
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  // Single shared instance. Every route accesses it via
-  // [PreferencesScope.of] so changes propagate everywhere.
-  final PreferencesService _prefs = PreferencesService();
-
   ThemeMode _mapThemeMode(AppThemeMode mode) {
     return switch (mode) {
       AppThemeMode.system => ThemeMode.system,
@@ -45,33 +52,22 @@ class _MyAppState extends State<MyApp> {
   /// 1. If the user has "Dynamic color" enabled AND the device supplied
   ///    a Material You palette, use the harmonized dynamic scheme.
   /// 2. Otherwise, use the user's static [AppThemePreset.seed].
-  ///
-  /// [dynamicAvailable] is true iff the device returned at least one
-  /// non-null dynamic scheme (light or dark). It is exposed to the UI
-  /// so the preferences page can show whether the toggle is actually
-  /// taking effect.
   ColorScheme _resolveScheme(
     ColorScheme? dynamicLight,
     ColorScheme? dynamicDark,
-    bool dynamicAvailable,
     Brightness brightness,
   ) {
-    final seed = _prefs.activePreset.seed;
-    if (!_prefs.useDynamicColor) {
+    final seed = widget.prefs.activePreset.seed;
+    if (!widget.prefs.useDynamicColor) {
       return ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
     }
     final dynamicScheme = brightness == Brightness.light
         ? dynamicLight
         : dynamicDark;
     if (dynamicScheme != null) {
-      // Harmonize so any existing hard-coded brand accents (e.g. on
-      // per-tab gradient cards) still feel cohesive with the wallpaper.
       return dynamicScheme.harmonized();
     }
-    // Dynamic color is on but the device didn't supply a palette.
-    // Fall back to the static preset so the app still has good colors.
     if (kDebugMode) {
-      // Helpful diagnostic in `flutter run` console.
       // ignore: avoid_print
       print(
         '[DynamicColor] No $brightness palette available from the OS. '
@@ -85,29 +81,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final prefs = widget.prefs;
     return PreferencesScope(
-      notifier: _prefs,
+      notifier: prefs,
       child: AnimatedBuilder(
-        animation: _prefs,
+        animation: prefs,
         builder: (context, _) {
           return DynamicColorBuilder(
             builder: (lightDynamic, darkDynamic) {
               final dynamicAvailable =
                   lightDynamic != null || darkDynamic != null;
-              // Surface the availability to the rest of the app so the
-              // preferences page can display a "Not available on this
-              // device" hint when the platform doesn't return a palette.
-              _prefs.setDynamicColorAvailable(dynamicAvailable);
+              // Surface availability to the rest of the app.
+              prefs.setDynamicColorAvailable(dynamicAvailable);
 
               return MaterialApp(
-                themeMode: _mapThemeMode(_prefs.themeMode),
+                themeMode: _mapThemeMode(prefs.themeMode),
                 theme: ThemeData(
                   useMaterial3: true,
                   fontFamily: 'Emberly',
                   colorScheme: _resolveScheme(
                     lightDynamic,
                     darkDynamic,
-                    dynamicAvailable,
                     Brightness.light,
                   ),
                   textTheme: const TextTheme(
@@ -122,11 +116,10 @@ class _MyAppState extends State<MyApp> {
                   colorScheme: _resolveScheme(
                     lightDynamic,
                     darkDynamic,
-                    dynamicAvailable,
                     Brightness.dark,
                   ),
                 ),
-                locale: _mapLocale(_prefs.language),
+                locale: _mapLocale(prefs.language),
                 supportedLocales: const [
                   Locale('en', 'US'),
                   Locale('es', 'ES'),
@@ -137,7 +130,7 @@ class _MyAppState extends State<MyApp> {
                 builder: (context, child) {
                   return MediaQuery(
                     data: MediaQuery.of(context).copyWith(
-                      textScaler: TextScaler.linear(_prefs.textScale),
+                      textScaler: TextScaler.linear(prefs.textScale),
                     ),
                     child: child ?? const SizedBox.shrink(),
                   );

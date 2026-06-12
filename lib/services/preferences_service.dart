@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// All possible theme modes the user can pick.
 enum AppThemeMode { system, light, dark }
@@ -83,18 +86,31 @@ enum WeekStartDay { sunday, monday, saturday }
 
 /// A single, app-wide container for every user-configurable preference.
 ///
-/// Exposed as a [ChangeNotifier] so screens can listen for changes. Wiring
-/// this into [MaterialApp] lets theme mode and locale apply globally.
+/// Exposed as a [ChangeNotifier] so screens can listen for changes.
+/// Wiring this into [MaterialApp] lets theme mode and locale apply
+/// globally.
 ///
-/// The values are kept in memory; persisting to `shared_preferences` is a
-/// one-line change inside each setter when the user is ready.
+/// ## Persistence
+///
+/// All values are mirrored to [SharedPreferences] under the
+/// `school_app.prefs.*` key namespace. Writes are debounced (500 ms) so
+/// rapid UI changes (e.g. dragging the text-size slider) only touch
+/// disk once. To load previously-saved values, call
+/// [PreferencesService.load] (async) before calling [runApp].
+///
+/// A full reset ([resetAll]) clears the corresponding keys from disk.
 class PreferencesService extends ChangeNotifier {
+  // ---------- Persistence key namespace ----------
+  static const String _kPrefix = 'school_app.prefs.';
+
   // ---------- Appearance ----------
   AppThemeMode _themeMode = AppThemeMode.system;
   /// Whether the underlying device (Android 12+) returned a non-null
   /// Material You palette the last time [MyApp] built. The preferences
   /// page reads this so it can show a status hint next to the
   /// "Dynamic color" switch (e.g. "Not available on this device").
+  /// This field is **runtime-only** — it is not persisted, because the
+  /// platform capability is queried on every app launch.
   bool _dynamicColorAvailable = false;
   AppThemePreset _activePreset = AppThemePreset.defaultBlue;
   double _textScale = 1.0; // 0.85..1.4
@@ -160,8 +176,139 @@ class PreferencesService extends ChangeNotifier {
   int _imageQuality = 80; // 50..100
   bool _offlineMode = false;
 
-  // ---------- Accessibility to defaults ----------
+  // ---------- Persistence internals ----------
+  SharedPreferences? _prefs;
+  Timer? _debounce;
+  final Set<String> _dirtyKeys = <String>{};
+
+  /// Async-load constructor. Read every persisted value from
+  /// [SharedPreferences] into the in-memory fields, falling back to
+  /// defaults for any missing key. Call once at app startup before
+  /// [runApp].
+  static Future<PreferencesService> load() async {
+    final sp = await SharedPreferences.getInstance();
+    final svc = PreferencesService._(sp);
+    svc._hydrate();
+    return svc;
+  }
+
+  /// Private constructor used by [load]. Direct instantiation falls
+  /// back to defaults; values are not persisted.
   PreferencesService();
+  PreferencesService._(this._prefs);
+
+  /// Populate fields from the [SharedPreferences] instance. Any key
+  /// that is not present (e.g. a brand-new install or after
+  /// [resetAll]) keeps its in-memory default.
+  void _hydrate() {
+    final p = _prefs!;
+    _themeMode = _readEnum(p, 'themeMode', AppThemeMode.values, _themeMode);
+    _activePreset =
+        _readEnum(p, 'activePreset', AppThemePreset.values, _activePreset);
+    _textScale = p.getDouble('textScale') ?? _textScale;
+    _useDynamicColor = p.getBool('useDynamicColor') ?? _useDynamicColor;
+
+    _pushEnabled = p.getBool('pushEnabled') ?? _pushEnabled;
+    _emailEnabled = p.getBool('emailEnabled') ?? _emailEnabled;
+    _smsEnabled = p.getBool('smsEnabled') ?? _smsEnabled;
+    _inAppSounds = p.getBool('inAppSounds') ?? _inAppSounds;
+    _inAppBanners = p.getBool('inAppBanners') ?? _inAppBanners;
+    _lockScreenPreview = p.getBool('lockScreenPreview') ?? _lockScreenPreview;
+    _doNotDisturb = p.getBool('doNotDisturb') ?? _doNotDisturb;
+    _dndStart = _readTimeOfDay(p, 'dndStart', _dndStart);
+    _dndEnd = _readTimeOfDay(p, 'dndEnd', _dndEnd);
+    _notifyGrades = p.getBool('notifyGrades') ?? _notifyGrades;
+    _notifyAttendance = p.getBool('notifyAttendance') ?? _notifyAttendance;
+    _notifySchedule = p.getBool('notifySchedule') ?? _notifySchedule;
+    _notifyPayments = p.getBool('notifyPayments') ?? _notifyPayments;
+    _notifyAnnouncements =
+        p.getBool('notifyAnnouncements') ?? _notifyAnnouncements;
+    _notifyReminders = p.getBool('notifyReminders') ?? _notifyReminders;
+
+    _language = _readEnum(p, 'language', AppLanguage.values, _language);
+    _region = p.getString('region') ?? _region;
+    _dateFormat =
+        _readEnum(p, 'dateFormat', DateFormatStyle.values, _dateFormat);
+    _distanceUnit = _readEnum(
+      p,
+      'distanceUnit',
+      DistanceUnit.values,
+      _distanceUnit,
+    );
+    _currencyFormat = _readEnum(
+      p,
+      'currencyFormat',
+      CurrencyFormat.values,
+      _currencyFormat,
+    );
+    _currencyCode = p.getString('currencyCode') ?? _currencyCode;
+    _weekStart =
+        _readEnum(p, 'weekStart', WeekStartDay.values, _weekStart);
+
+    _reduceMotion = p.getBool('reduceMotion') ?? _reduceMotion;
+    _reduceTransparency =
+        p.getBool('reduceTransparency') ?? _reduceTransparency;
+    _highContrastText = p.getBool('highContrastText') ?? _highContrastText;
+    _boldText = p.getBool('boldText') ?? _boldText;
+    _underlineLinks = p.getBool('underlineLinks') ?? _underlineLinks;
+    _screenReaderOptimized =
+        p.getBool('screenReaderOptimized') ?? _screenReaderOptimized;
+    _animationSpeed = p.getDouble('animationSpeed') ?? _animationSpeed;
+    _colorBlindAssist = p.getBool('colorBlindAssist') ?? _colorBlindAssist;
+
+    _analyticsEnabled = p.getBool('analyticsEnabled') ?? _analyticsEnabled;
+    _personalizationEnabled =
+        p.getBool('personalizationEnabled') ?? _personalizationEnabled;
+    _crashReportsEnabled =
+        p.getBool('crashReportsEnabled') ?? _crashReportsEnabled;
+    _shareUsageWithSchool =
+        p.getBool('shareUsageWithSchool') ?? _shareUsageWithSchool;
+    _showProfilePictureToClassmates =
+        p.getBool('showProfilePictureToClassmates') ??
+            _showProfilePictureToClassmates;
+    _showOnlineStatus = p.getBool('showOnlineStatus') ?? _showOnlineStatus;
+    _allowReadReceipts =
+        p.getBool('allowReadReceipts') ?? _allowReadReceipts;
+
+    _twoFactorEnabled = p.getBool('twoFactorEnabled') ?? _twoFactorEnabled;
+    _biometricLogin = p.getBool('biometricLogin') ?? _biometricLogin;
+    _autoLogout = p.getBool('autoLogout') ?? _autoLogout;
+    _autoLogoutMinutes = p.getInt('autoLogoutMinutes') ?? _autoLogoutMinutes;
+    _rememberMe = p.getBool('rememberMe') ?? _rememberMe;
+
+    _autoSync = p.getBool('autoSync') ?? _autoSync;
+    _wifiOnlyDownloads = p.getBool('wifiOnlyDownloads') ?? _wifiOnlyDownloads;
+    _autoClearCache = p.getBool('autoClearCache') ?? _autoClearCache;
+    _cacheRetentionDays =
+        p.getInt('cacheRetentionDays') ?? _cacheRetentionDays;
+    _imageQuality = p.getInt('imageQuality') ?? _imageQuality;
+    _offlineMode = p.getBool('offlineMode') ?? _offlineMode;
+  }
+
+  // ---------- Hydration helpers ----------
+
+  static T _readEnum<T extends Enum>(
+    SharedPreferences p,
+    String key,
+    List<T> values,
+    T fallback,
+  ) {
+    final raw = p.getInt(key);
+    if (raw == null || raw < 0 || raw >= values.length) return fallback;
+    return values[raw];
+  }
+
+  static TimeOfDay _readTimeOfDay(
+    SharedPreferences p,
+    String key,
+    TimeOfDay fallback,
+  ) {
+    final minutes = p.getInt(key);
+    if (minutes == null || minutes < 0 || minutes >= 24 * 60) {
+      return fallback;
+    }
+    return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
+  }
 
   // -------------------- GETTERS --------------------
   AppThemeMode get themeMode => _themeMode;
@@ -235,9 +382,15 @@ class PreferencesService extends ChangeNotifier {
   bool get offlineMode => _offlineMode;
 
   // -------------------- SETTERS --------------------
+  // Every setter:
+  //   1. Mutates the in-memory field (guarded by an equality check)
+  //   2. Calls notifyListeners() so the UI rebuilds immediately
+  //   3. Marks the corresponding key as dirty and schedules a debounced
+  //      flush to disk.
   void setThemeMode(AppThemeMode v) {
     if (_themeMode == v) return;
     _themeMode = v;
+    _set('themeMode', _themeMode.index);
     notifyListeners();
   }
 
@@ -248,13 +401,16 @@ class PreferencesService extends ChangeNotifier {
     // are mutually exclusive — the OS wallpaper palette is its own thing.
     if (_useDynamicColor) {
       _useDynamicColor = false;
+      _setBool('useDynamicColor', false);
     }
+    _set('activePreset', _activePreset.index);
     notifyListeners();
   }
 
   void setUseDynamicColor(bool v) {
     if (_useDynamicColor == v) return;
     _useDynamicColor = v;
+    _setBool('useDynamicColor', v);
     notifyListeners();
   }
 
@@ -262,77 +418,201 @@ class PreferencesService extends ChangeNotifier {
     v = v.clamp(0.85, 1.4);
     if ((_textScale - v).abs() < 0.001) return;
     _textScale = v;
+    _setDouble('textScale', v);
     notifyListeners();
   }
 
-  void setPushEnabled(bool v) => _set(() => _pushEnabled = v);
-  void setEmailEnabled(bool v) => _set(() => _emailEnabled = v);
-  void setSmsEnabled(bool v) => _set(() => _smsEnabled = v);
-  void setInAppSounds(bool v) => _set(() => _inAppSounds = v);
-  void setInAppBanners(bool v) => _set(() => _inAppBanners = v);
-  void setLockScreenPreview(bool v) => _set(() => _lockScreenPreview = v);
-  void setDoNotDisturb(bool v) => _set(() => _doNotDisturb = v);
-  void setDndStart(TimeOfDay v) => _set(() => _dndStart = v);
-  void setDndEnd(TimeOfDay v) => _set(() => _dndEnd = v);
-  void setNotifyGrades(bool v) => _set(() => _notifyGrades = v);
-  void setNotifyAttendance(bool v) => _set(() => _notifyAttendance = v);
-  void setNotifySchedule(bool v) => _set(() => _notifySchedule = v);
-  void setNotifyPayments(bool v) => _set(() => _notifyPayments = v);
-  void setNotifyAnnouncements(bool v) => _set(() => _notifyAnnouncements = v);
-  void setNotifyReminders(bool v) => _set(() => _notifyReminders = v);
+  void setPushEnabled(bool v) => _setBool('pushEnabled', v);
+  void setEmailEnabled(bool v) => _setBool('emailEnabled', v);
+  void setSmsEnabled(bool v) => _setBool('smsEnabled', v);
+  void setInAppSounds(bool v) => _setBool('inAppSounds', v);
+  void setInAppBanners(bool v) => _setBool('inAppBanners', v);
+  void setLockScreenPreview(bool v) => _setBool('lockScreenPreview', v);
+  void setDoNotDisturb(bool v) => _setBool('doNotDisturb', v);
+  void setDndStart(TimeOfDay v) {
+    _dndStart = v;
+    _set('dndStart', v.hour * 60 + v.minute);
+  }
+  void setDndEnd(TimeOfDay v) {
+    _dndEnd = v;
+    _set('dndEnd', v.hour * 60 + v.minute);
+  }
+  void setNotifyGrades(bool v) => _setBool('notifyGrades', v);
+  void setNotifyAttendance(bool v) => _setBool('notifyAttendance', v);
+  void setNotifySchedule(bool v) => _setBool('notifySchedule', v);
+  void setNotifyPayments(bool v) => _setBool('notifyPayments', v);
+  void setNotifyAnnouncements(bool v) => _setBool('notifyAnnouncements', v);
+  void setNotifyReminders(bool v) => _setBool('notifyReminders', v);
 
-  void setLanguage(AppLanguage v) => _set(() => _language = v);
-  void setRegion(String v) => _set(() => _region = v);
-  void setDateFormat(DateFormatStyle v) => _set(() => _dateFormat = v);
-  void setDistanceUnit(DistanceUnit v) => _set(() => _distanceUnit = v);
-  void setCurrencyFormat(CurrencyFormat v) => _set(() => _currencyFormat = v);
-  void setCurrencyCode(String v) => _set(() => _currencyCode = v);
-  void setWeekStart(WeekStartDay v) => _set(() => _weekStart = v);
+  void setLanguage(AppLanguage v) {
+    _language = v;
+    _set('language', v.index);
+  }
+  void setRegion(String v) {
+    _region = v;
+    _setString('region', v);
+  }
+  void setDateFormat(DateFormatStyle v) {
+    _dateFormat = v;
+    _set('dateFormat', v.index);
+  }
+  void setDistanceUnit(DistanceUnit v) {
+    _distanceUnit = v;
+    _set('distanceUnit', v.index);
+  }
+  void setCurrencyFormat(CurrencyFormat v) {
+    _currencyFormat = v;
+    _set('currencyFormat', v.index);
+  }
+  void setCurrencyCode(String v) {
+    _currencyCode = v;
+    _setString('currencyCode', v);
+  }
+  void setWeekStart(WeekStartDay v) {
+    _weekStart = v;
+    _set('weekStart', v.index);
+  }
 
-  void setReduceMotion(bool v) => _set(() => _reduceMotion = v);
-  void setReduceTransparency(bool v) => _set(() => _reduceTransparency = v);
-  void setHighContrastText(bool v) => _set(() => _highContrastText = v);
-  void setBoldText(bool v) => _set(() => _boldText = v);
-  void setUnderlineLinks(bool v) => _set(() => _underlineLinks = v);
+  void setReduceMotion(bool v) => _setBool('reduceMotion', v);
+  void setReduceTransparency(bool v) => _setBool('reduceTransparency', v);
+  void setHighContrastText(bool v) => _setBool('highContrastText', v);
+  void setBoldText(bool v) => _setBool('boldText', v);
+  void setUnderlineLinks(bool v) => _setBool('underlineLinks', v);
   void setScreenReaderOptimized(bool v) =>
-      _set(() => _screenReaderOptimized = v);
+      _setBool('screenReaderOptimized', v);
   void setAnimationSpeed(double v) {
     v = v.clamp(0.5, 2.0);
-    _set(() => _animationSpeed = v);
+    _animationSpeed = v;
+    _setDouble('animationSpeed', v);
   }
 
-  void setColorBlindAssist(bool v) => _set(() => _colorBlindAssist = v);
+  void setColorBlindAssist(bool v) => _setBool('colorBlindAssist', v);
 
-  void setAnalyticsEnabled(bool v) => _set(() => _analyticsEnabled = v);
+  void setAnalyticsEnabled(bool v) => _setBool('analyticsEnabled', v);
   void setPersonalizationEnabled(bool v) =>
-      _set(() => _personalizationEnabled = v);
-  void setCrashReportsEnabled(bool v) => _set(() => _crashReportsEnabled = v);
-  void setShareUsageWithSchool(bool v) =>
-      _set(() => _shareUsageWithSchool = v);
+      _setBool('personalizationEnabled', v);
+  void setCrashReportsEnabled(bool v) => _setBool('crashReportsEnabled', v);
+  void setShareUsageWithSchool(bool v) => _setBool('shareUsageWithSchool', v);
   void setShowProfilePictureToClassmates(bool v) =>
-      _set(() => _showProfilePictureToClassmates = v);
-  void setShowOnlineStatus(bool v) => _set(() => _showOnlineStatus = v);
-  void setAllowReadReceipts(bool v) => _set(() => _allowReadReceipts = v);
+      _setBool('showProfilePictureToClassmates', v);
+  void setShowOnlineStatus(bool v) => _setBool('showOnlineStatus', v);
+  void setAllowReadReceipts(bool v) => _setBool('allowReadReceipts', v);
 
-  void setTwoFactorEnabled(bool v) => _set(() => _twoFactorEnabled = v);
-  void setBiometricLogin(bool v) => _set(() => _biometricLogin = v);
-  void setAutoLogout(bool v) => _set(() => _autoLogout = v);
-  void setAutoLogoutMinutes(int v) => _set(() => _autoLogoutMinutes = v);
-  void setRememberMe(bool v) => _set(() => _rememberMe = v);
+  void setTwoFactorEnabled(bool v) => _setBool('twoFactorEnabled', v);
+  void setBiometricLogin(bool v) => _setBool('biometricLogin', v);
+  void setAutoLogout(bool v) => _setBool('autoLogout', v);
+  void setAutoLogoutMinutes(int v) {
+    _autoLogoutMinutes = v;
+    _setInt('autoLogoutMinutes', v);
+  }
+  void setRememberMe(bool v) => _setBool('rememberMe', v);
 
-  void setAutoSync(bool v) => _set(() => _autoSync = v);
-  void setWifiOnlyDownloads(bool v) => _set(() => _wifiOnlyDownloads = v);
-  void setAutoClearCache(bool v) => _set(() => _autoClearCache = v);
-  void setCacheRetentionDays(int v) => _set(() => _cacheRetentionDays = v);
+  void setAutoSync(bool v) => _setBool('autoSync', v);
+  void setWifiOnlyDownloads(bool v) => _setBool('wifiOnlyDownloads', v);
+  void setAutoClearCache(bool v) => _setBool('autoClearCache', v);
+  void setCacheRetentionDays(int v) {
+    _cacheRetentionDays = v;
+    _setInt('cacheRetentionDays', v);
+  }
   void setImageQuality(int v) {
     v = v.clamp(50, 100);
-    _set(() => _imageQuality = v);
+    _imageQuality = v;
+    _setInt('imageQuality', v);
   }
 
-  void setOfflineMode(bool v) => _set(() => _offlineMode = v);
+  void setOfflineMode(bool v) => _setBool('offlineMode', v);
 
-  /// Resets every preference to its default value.
-  void resetAll() {
+  // -------------------- Persist helpers --------------------
+
+  /// Records [key] as dirty and (re)starts a debounce timer. The actual
+  /// write happens in [_flush]. This keeps disk I/O minimal even when
+  /// the user drags a slider or rapidly toggles switches.
+  void _set(String key, int value) {
+    _dirtyKeys.add(key);
+    _dirtyValues[key] = value;
+    _scheduleFlush();
+    notifyListeners();
+  }
+
+  void _setBool(String key, bool value) {
+    _dirtyKeys.add(key);
+    _dirtyBoolValues[key] = value;
+    _scheduleFlush();
+    notifyListeners();
+  }
+
+  void _setDouble(String key, double value) {
+    _dirtyKeys.add(key);
+    _dirtyDoubleValues[key] = value;
+    _scheduleFlush();
+    notifyListeners();
+  }
+
+  void _setInt(String key, int value) {
+    _dirtyKeys.add(key);
+    _dirtyIntValues[key] = value;
+    _scheduleFlush();
+    notifyListeners();
+  }
+
+  void _setString(String key, String value) {
+    _dirtyKeys.add(key);
+    _dirtyStringValues[key] = value;
+    _scheduleFlush();
+    notifyListeners();
+  }
+
+  /// Buffers for the debounced flush.
+  final Map<String, int> _dirtyValues = <String, int>{};
+  final Map<String, bool> _dirtyBoolValues = <String, bool>{};
+  final Map<String, double> _dirtyDoubleValues = <String, double>{};
+  final Map<String, int> _dirtyIntValues = <String, int>{};
+  final Map<String, String> _dirtyStringValues = <String, String>{};
+
+  void _scheduleFlush() {
+    if (_prefs == null) return; // No persistence — nothing to flush.
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), _flush);
+  }
+
+  Future<void> _flush() async {
+    if (_prefs == null) return;
+    final p = _prefs!;
+    // Snapshot and clear dirty maps so further edits during the await
+    // get re-scheduled.
+    final ints = Map<String, int>.from(_dirtyValues);
+    final bools = Map<String, bool>.from(_dirtyBoolValues);
+    final doubles = Map<String, double>.from(_dirtyDoubleValues);
+    final extraInts = Map<String, int>.from(_dirtyIntValues);
+    final strings = Map<String, String>.from(_dirtyStringValues);
+    _dirtyValues.clear();
+    _dirtyBoolValues.clear();
+    _dirtyDoubleValues.clear();
+    _dirtyIntValues.clear();
+    _dirtyStringValues.clear();
+    _dirtyKeys.clear();
+
+    for (final e in ints.entries) {
+      await p.setInt(_kPrefix + e.key, e.value);
+    }
+    for (final e in bools.entries) {
+      await p.setBool(_kPrefix + e.key, e.value);
+    }
+    for (final e in doubles.entries) {
+      await p.setDouble(_kPrefix + e.key, e.value);
+    }
+    for (final e in extraInts.entries) {
+      await p.setInt(_kPrefix + e.key, e.value);
+    }
+    for (final e in strings.entries) {
+      await p.setString(_kPrefix + e.key, e.value);
+    }
+  }
+
+  /// Resets every preference to its default value AND clears the
+  /// corresponding keys from [SharedPreferences] so the next launch
+  /// sees the defaults.
+  Future<void> resetAll() async {
     _themeMode = AppThemeMode.system;
     _activePreset = AppThemePreset.defaultBlue;
     _textScale = 1.0;
@@ -385,12 +665,27 @@ class PreferencesService extends ChangeNotifier {
     _cacheRetentionDays = 30;
     _imageQuality = 80;
     _offlineMode = false;
+    // Clear every stored key so we don't re-hydrate stale values.
+    if (_prefs != null) {
+      final p = _prefs!;
+      for (final key in p.getKeys()) {
+        if (key.startsWith(_kPrefix)) {
+          await p.remove(key);
+        }
+      }
+    }
     notifyListeners();
   }
 
-  void _set(VoidCallback mutator) {
-    mutator();
-    notifyListeners();
+  @override
+  void dispose() {
+    // Flush any pending writes synchronously so nothing is lost if the
+    // app is killed shortly after the last edit.
+    _debounce?.cancel();
+    // Fire-and-forget flush; the OS may not give us time to await, but
+    // the SharedPreferences plugin is fast enough that this is safe.
+    _flush();
+    super.dispose();
   }
 }
 

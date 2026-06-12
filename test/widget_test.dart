@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:school_app/main.dart';
+import 'package:school_app/services/preferences_service.dart';
 
 void main() {
   testWidgets('Home cards open pages and floating navigation stays off home', (
     tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
+    // Use an in-memory PreferencesService (no disk) for the test.
+    await tester.pumpWidget(MyApp(prefs: PreferencesService()));
 
     expect(find.text('Dashboard'), findsOneWidget);
     expect(find.byKey(const ValueKey('nav-home')), findsNothing);
