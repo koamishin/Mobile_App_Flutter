@@ -24,7 +24,6 @@ class TimeLabel extends StatelessWidget {
       child: Text(
         time,
         style: TextStyle(
-          fontFamily: 'Poppins',
           fontSize: 13,
           fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
           color: isActive ? scheme.primary : scheme.onSurfaceVariant,

@@ -22,7 +22,6 @@ class ScheduleSummaryCard extends StatelessWidget {
             child: Text(
               'Daily Overview',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: scheme.onSurface,
@@ -110,24 +109,22 @@ class ScheduleSummaryCard extends StatelessWidget {
             value,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-            ),
+style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
           ),
           const SizedBox(height: 2),
           Text(
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Colors.white.withValues(alpha: 0.88),
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
+style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.88),
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
           ),
         ],
       ),

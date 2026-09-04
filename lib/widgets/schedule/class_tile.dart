@@ -51,7 +51,6 @@ class ClassTile extends StatelessWidget {
                     Text(
                       schedule.subjectName,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
                         color: scheme.onSurface,
@@ -63,7 +62,6 @@ class ClassTile extends StatelessWidget {
                           ? schedule.roomNumber
                           : '${schedule.teacherName} • ${schedule.roomNumber}',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: scheme.onSurfaceVariant,
@@ -80,7 +78,6 @@ class ClassTile extends StatelessWidget {
                   Text(
                     schedule.timeRangeString.split(' - ').first,
                     style: TextStyle(
-                      fontFamily: 'Poppins',
                       fontSize: 12,
                       fontWeight: FontWeight.w800,
                       color: scheme.primary,
@@ -88,10 +85,9 @@ class ClassTile extends StatelessWidget {
                   ),
                   Text(
                     schedule.timeRangeString.split(' - ').last,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
+style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       color: scheme.onSurfaceVariant,
                     ),
                   ),

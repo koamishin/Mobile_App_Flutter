@@ -2,6 +2,45 @@ import 'package:flutter/material.dart';
 
 import '../widgets/page_components.dart';
 
+class GradeLevelHistory {
+  const GradeLevelHistory({
+    required this.gradeName,
+    required this.academicYear,
+    required this.semesters,
+  });
+
+  final String gradeName;
+  final String academicYear;
+  final List<SemesterHistory> semesters;
+}
+
+class SemesterHistory {
+  const SemesterHistory({
+    required this.semesterName,
+    required this.generalAverage,
+    required this.subjects,
+  });
+
+  final String semesterName;
+  final double generalAverage;
+  final List<SubjectGrade> subjects;
+}
+
+class SubjectGrade {
+  const SubjectGrade({
+    required this.subjectName,
+    required this.finalGrade,
+    required this.remarks,
+    required this.icon,
+  });
+
+  final String subjectName;
+  final int finalGrade;
+  final String remarks;
+  final IconData icon;
+}
+
+/// Redesigned Grades Screen matching the Material 3 surface card design system.
 class GradesPage extends StatefulWidget {
   const GradesPage({super.key});
 
@@ -15,11 +54,9 @@ class _GradesPageState extends State<GradesPage> {
   @override
   void initState() {
     super.initState();
-    // Expand Grade 10 by default to provide an interactive and premium experience
     _expandedGrades['Grade 10'] = true;
   }
 
-  // Structured Academic History mock data from Grade 6 to Grade 10
   final List<GradeLevelHistory> _academicHistory = const [
     GradeLevelHistory(
       gradeName: 'Grade 10',
@@ -207,177 +244,254 @@ class _GradesPageState extends State<GradesPage> {
         ),
       ],
     ),
-    GradeLevelHistory(
-      gradeName: 'Grade 7',
-      academicYear: '2022 - 2023',
-      semesters: [
-        SemesterHistory(
-          semesterName: '1st Semester',
-          generalAverage: 89.5,
-          subjects: [
-            SubjectGrade(
-              subjectName: 'General Math',
-              finalGrade: 88,
-              remarks: 'Passed',
-              icon: Icons.calculate_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Life Science',
-              finalGrade: 87,
-              remarks: 'Passed',
-              icon: Icons.eco_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Reading',
-              finalGrade: 93,
-              remarks: 'Passed',
-              icon: Icons.book_rounded,
-            ),
-          ],
-        ),
-        SemesterHistory(
-          semesterName: '2nd Semester',
-          generalAverage: 90.8,
-          subjects: [
-            SubjectGrade(
-              subjectName: 'General Math',
-              finalGrade: 91,
-              remarks: 'Passed',
-              icon: Icons.calculate_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Life Science',
-              finalGrade: 89,
-              remarks: 'Passed',
-              icon: Icons.eco_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Writing & Speaking',
-              finalGrade: 92,
-              remarks: 'Passed',
-              icon: Icons.record_voice_over_rounded,
-            ),
-          ],
-        ),
-      ],
-    ),
-    GradeLevelHistory(
-      gradeName: 'Grade 6',
-      academicYear: '2021 - 2022',
-      semesters: [
-        SemesterHistory(
-          semesterName: '1st Semester',
-          generalAverage: 88.3,
-          subjects: [
-            SubjectGrade(
-              subjectName: 'Elementary Math',
-              finalGrade: 87,
-              remarks: 'Passed',
-              icon: Icons.calculate_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Intro to Science',
-              finalGrade: 86,
-              remarks: 'Passed',
-              icon: Icons.lightbulb_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'English Basics',
-              finalGrade: 92,
-              remarks: 'Passed',
-              icon: Icons.abc_rounded,
-            ),
-          ],
-        ),
-        SemesterHistory(
-          semesterName: '2nd Semester',
-          generalAverage: 89.7,
-          subjects: [
-            SubjectGrade(
-              subjectName: 'Elementary Math',
-              finalGrade: 89,
-              remarks: 'Passed',
-              icon: Icons.calculate_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'Intro to Science',
-              finalGrade: 88,
-              remarks: 'Passed',
-              icon: Icons.lightbulb_rounded,
-            ),
-            SubjectGrade(
-              subjectName: 'English Basics',
-              finalGrade: 92,
-              remarks: 'Passed',
-              icon: Icons.abc_rounded,
-            ),
-          ],
-        ),
-      ],
-    ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return StudentPageScaffold(
       title: 'Grades',
       subtitle: 'Track your scores and subject progress.',
       icon: Icons.assessment_rounded,
       children: [
-        GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 14,
-          mainAxisSpacing: 14,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            MetricCard(
-              title: 'Average',
-              value: '92%',
-              icon: Icons.star_rounded,
-              colors: [Color(0xFF9B7BFF), Color(0xFF6D5DFB)],
+        // 1. Top Summary Hero Card
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            color: isDark
+                ? scheme.surfaceContainerHigh
+                : scheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(
+              color: scheme.outlineVariant.withValues(alpha: isDark ? 0.35 : 0.5),
+              width: 1,
             ),
-            MetricCard(
-              title: 'Class Rank',
-              value: '#4',
-              icon: Icons.emoji_events_rounded,
-              colors: [Color(0xFFFFB86B), Color(0xFFFF8E53)],
+            boxShadow: [
+              BoxShadow(
+                color: scheme.shadow.withValues(alpha: isDark ? 0.18 : 0.04),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: scheme.primaryContainer.withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.verified_rounded,
+                          size: 15,
+                          color: scheme.primary,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'President\'s Honor Roll',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: scheme.onPrimaryContainer,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    'AY 2025-2026',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'General Average',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '92.9',
+                              style: TextStyle(
+                                fontSize: 34,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -1,
+                                color: scheme.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '%',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: scheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 48,
+                    width: 1,
+                    color: scheme.outlineVariant.withValues(alpha: 0.4),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Class Rank',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '#4',
+                              style: TextStyle(
+                                fontSize: 34,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -1,
+                                color: scheme.secondary,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'of 142',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // 2. Section Heading: Current Subjects
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Current Subjects',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.4,
+                color: scheme.onSurface,
+              ),
+            ),
+            Text(
+              'Grade 10 • Sem 2',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: scheme.primary,
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        const SoftInfoCard(
+        const SizedBox(height: 12),
+
+        // 3. Subject List Cards
+        _SubjectCard(
           title: 'Mathematics',
-          subtitle: '96% - Excellent problem solving',
+          grade: 96,
+          remarks: 'Excellent problem solving',
           icon: Icons.calculate_rounded,
-          trailing: Text('A+', style: _badgeStyle),
+          letterGrade: 'A+',
+          color: scheme.primary,
         ),
-        const SoftInfoCard(
+        _SubjectCard(
           title: 'Science',
-          subtitle: '91% - Lab report improved',
+          grade: 93,
+          remarks: 'Lab report improved',
           icon: Icons.science_rounded,
-          trailing: Text('A', style: _badgeStyle),
+          letterGrade: 'A',
+          color: scheme.secondary,
         ),
-        const SoftInfoCard(
+        _SubjectCard(
+          title: 'Social Studies',
+          grade: 96,
+          remarks: 'Outstanding research',
+          icon: Icons.public_rounded,
+          letterGrade: 'A+',
+          color: scheme.tertiary,
+        ),
+        _SubjectCard(
           title: 'English',
-          subtitle: '88% - Essay feedback available',
+          grade: 90,
+          remarks: 'Essay feedback available',
           icon: Icons.menu_book_rounded,
-          trailing: Text('B+', style: _badgeStyle),
+          letterGrade: 'A-',
+          color: scheme.primary,
         ),
-        const SizedBox(height: 22),
-        const Text(
+        const SizedBox(height: 24),
+
+        // 4. Section Heading: Academic History
+        Text(
           'Academic History',
           style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 22,
+            fontSize: 18,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF27364A),
+            letterSpacing: -0.4,
+            color: scheme.onSurface,
           ),
         ),
         const SizedBox(height: 12),
+
+        // 5. Expandable History Cards
         ..._academicHistory.map((history) {
           final isExpanded = _expandedGrades[history.gradeName] ?? false;
-          return GradeLevelCard(
+          return _AcademicHistoryCard(
             history: history,
             isExpanded: isExpanded,
             onTap: () {
@@ -392,152 +506,326 @@ class _GradesPageState extends State<GradesPage> {
   }
 }
 
-class GradeLevelCard extends StatelessWidget {
-  final GradeLevelHistory history;
-  final bool isExpanded;
-  final VoidCallback onTap;
-
-  const GradeLevelCard({
-    required this.history,
-    required this.isExpanded,
-    required this.onTap,
-    super.key,
+/// Unified Material 3 Subject Card
+class _SubjectCard extends StatelessWidget {
+  const _SubjectCard({
+    required this.title,
+    required this.grade,
+    required this.remarks,
+    required this.icon,
+    required this.letterGrade,
+    required this.color,
   });
+
+  final String title;
+  final int grade;
+  final String remarks;
+  final IconData icon;
+  final String letterGrade;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    // Determine unique premium color scheme for each grade icon
-    final Color themeColor;
-    switch (history.gradeName) {
-      case 'Grade 10':
-        themeColor = const Color(0xFF6D5DFB);
-        break;
-      case 'Grade 9':
-        themeColor = const Color(0xFFFF8E53);
-        break;
-      case 'Grade 8':
-        themeColor = const Color(0xFF32A89D);
-        break;
-      case 'Grade 7':
-        themeColor = const Color(0xFF2F80ED);
-        break;
-      default:
-        themeColor = const Color(0xFF9B7BFF);
-    }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: scheme.surface,
-        borderRadius: BorderRadius.circular(24),
+        color: isDark
+            ? scheme.surfaceContainerHigh
+            : scheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: isDark ? 0.3 : 0.45),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: scheme.shadow.withValues(alpha: 0.1),
-            blurRadius: 18,
-            offset: const Offset(0, 10),
+            color: scheme.shadow.withValues(alpha: isDark ? 0.12 : 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(icon, color: color, size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.2,
+                    color: scheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  remarks,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  letterGrade,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                '$grade%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Expandable Academic History Year Card
+class _AcademicHistoryCard extends StatelessWidget {
+  const _AcademicHistoryCard({
+    required this.history,
+    required this.isExpanded,
+    required this.onTap,
+  });
+
+  final GradeLevelHistory history;
+  final bool isExpanded;
+  final VoidCallback onTap;
+
+  double _calculateAverage() {
+    if (history.semesters.isEmpty) return 0;
+    final total = history.semesters.fold<double>(
+      0,
+      (sum, sem) => sum + sem.generalAverage,
+    );
+    return double.parse((total / history.semesters.length).toStringAsFixed(1));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final avg = _calculateAverage();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: isDark
+            ? scheme.surfaceContainerHigh
+            : scheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: isDark ? 0.3 : 0.45),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: scheme.shadow.withValues(alpha: isDark ? 0.14 : 0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         children: [
-          InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(24),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: themeColor.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Icon(Icons.school_rounded, color: themeColor),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          history.gradeName,
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF26364A),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'AY ${history.academicYear}',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF66778A),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: themeColor.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      'Avg: ${_calculateYearlyAverage()}%',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        color: themeColor,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(22),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: scheme.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        Icons.school_rounded,
+                        color: scheme.primary,
+                        size: 20,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  AnimatedRotation(
-                    turns: isExpanded ? 0.5 : 0.0,
-                    duration: const Duration(milliseconds: 250),
-                    child: const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF66778A),
-                      size: 24,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            history.gradeName,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: scheme.onSurface,
+                            ),
+                          ),
+                          Text(
+                            'AY ${history.academicYear}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: scheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: scheme.primaryContainer.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Avg: $avg%',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w800,
+                          color: scheme.onPrimaryContainer,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    AnimatedRotation(
+                      turns: isExpanded ? 0.5 : 0.0,
+                      duration: const Duration(milliseconds: 240),
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: scheme.onSurfaceVariant,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           ClipRect(
             child: AnimatedSize(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 280),
               curve: Curves.easeInOut,
               child: isExpanded
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: scheme.outlineVariant,
-                          indent: 18,
-                          endIndent: 18,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
-                          child: Column(
-                            children: history.semesters
-                                .map((sem) => _buildSemesterView(context, sem, themeColor))
-                                .toList(),
-                          ),
-                        ),
-                      ],
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: Column(
+                        children: history.semesters.map((sem) {
+                          return Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: scheme.surfaceContainerHighest
+                                  .withValues(alpha: 0.35),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      sem.semesterName,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w800,
+                                        color: scheme.onSurface,
+                                      ),
+                                    ),
+                                    Text(
+                                      'GPA: ${sem.generalAverage}%',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                        color: scheme.primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                ...sem.subjects.map((sub) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          sub.icon,
+                                          size: 16,
+                                          color: scheme.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            sub.subjectName,
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w500,
+                                              color: scheme.onSurface,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${sub.finalGrade}%',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                            color: scheme.onSurface,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     )
                   : const SizedBox.shrink(),
             ),
@@ -546,157 +834,4 @@ class GradeLevelCard extends StatelessWidget {
       ),
     );
   }
-
-  String _calculateYearlyAverage() {
-    if (history.semesters.isEmpty) return '0';
-    double total = history.semesters.fold(0.0, (sum, sem) => sum + sem.generalAverage);
-    return (total / history.semesters.length).toStringAsFixed(1);
-  }
-
-  Widget _buildSemesterView(BuildContext context, SemesterHistory sem, Color themeColor) {
-    final scheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              sem.semesterName,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF26364A),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: scheme.primaryContainer,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'Sem Avg: ${sem.generalAverage}%',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF2F80ED),
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        ...sem.subjects.map((sub) => _buildSubjectRow(context, sub)),
-        const SizedBox(height: 14),
-      ],
-    );
-  }
-
-  Widget _buildSubjectRow(BuildContext context, SubjectGrade sub) {
-    final scheme = Theme.of(context).colorScheme;
-    final isPassed = sub.remarks.toLowerCase() == 'passed';
-    final remarksColor = isPassed ? const Color(0xFF27AE60) : const Color(0xFFEB5757);
-    final remarksBg = isPassed ? const Color(0xFFEBF7EE) : const Color(0xFFFDF0F0);
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerHigh,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: scheme.outlineVariant, width: 1),
-      ),
-      child: Row(
-        children: [
-          Icon(sub.icon, size: 18, color: const Color(0xFF66778A)),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              sub.subjectName,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF26364A),
-              ),
-            ),
-          ),
-          Text(
-            '${sub.finalGrade}%',
-            style: const TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF26364A),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: remarksBg,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              sub.remarks,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
-                color: remarksColor,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
-
-class GradeLevelHistory {
-  final String gradeName;
-  final String academicYear;
-  final List<SemesterHistory> semesters;
-
-  const GradeLevelHistory({
-    required this.gradeName,
-    required this.academicYear,
-    required this.semesters,
-  });
-}
-
-class SemesterHistory {
-  final String semesterName;
-  final List<SubjectGrade> subjects;
-  final double generalAverage;
-
-  const SemesterHistory({
-    required this.semesterName,
-    required this.subjects,
-    required this.generalAverage,
-  });
-}
-
-class SubjectGrade {
-  final String subjectName;
-  final int finalGrade;
-  final String remarks;
-  final IconData icon;
-
-  const SubjectGrade({
-    required this.subjectName,
-    required this.finalGrade,
-    required this.remarks,
-    required this.icon,
-  });
-}
-
-const TextStyle _badgeStyle = TextStyle(
-  fontFamily: 'Poppins',
-  fontSize: 18,
-  fontWeight: FontWeight.w900,
-  color: Color(0xFF2F80ED),
-);

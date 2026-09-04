@@ -31,7 +31,6 @@ class HomePage extends StatelessWidget {
                 Text(
                   'Dashboard',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 24,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -41,7 +40,6 @@ class HomePage extends StatelessWidget {
                 Text(
                   'Quick Overview',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: scheme.primary,

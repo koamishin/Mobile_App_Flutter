@@ -33,7 +33,6 @@ class DailyScheduleTimeline extends StatelessWidget {
           child: Text(
             'Timeline Schedule',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: scheme.onSurface,
@@ -164,7 +163,6 @@ class DailyScheduleTimeline extends StatelessWidget {
           Text(
             'No Classes Scheduled',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w800,
               color: scheme.onSurface,
@@ -175,7 +173,6 @@ class DailyScheduleTimeline extends StatelessWidget {
             'Enjoy your free day! Relax or catch up on homework.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: scheme.onSurfaceVariant,

@@ -97,7 +97,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                 Text(
                   'Academic Calendar',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 17,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -118,7 +117,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                     Text(
                       monthLabel,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: scheme.primary,
@@ -150,7 +148,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                         d,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           color: scheme.onSurfaceVariant,
@@ -216,7 +213,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                         Text(
                           '${date.day}',
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: isSelected || isCurrentToday
                                 ? FontWeight.w800
@@ -261,7 +257,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
               Text(
                 'Schedule Events',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: scheme.onSurface,
@@ -283,12 +278,11 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                   const SizedBox(width: 6),
                   Text(
                     'No exams or holidays on this date.',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: scheme.onSurfaceVariant,
-                    ),
+style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: scheme.onSurfaceVariant,
+                  ),
                   ),
                 ],
               ),
@@ -334,7 +328,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                 Text(
                   event.title,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -344,7 +337,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
                 Text(
                   event.description,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                     color: scheme.onSurfaceVariant,
@@ -363,7 +355,6 @@ class _AcademicCalendarState extends State<AcademicCalendar> {
             child: Text(
               typeLabel,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 8,
                 fontWeight: FontWeight.w800,
                 color: event.color,

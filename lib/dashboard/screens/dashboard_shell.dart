@@ -93,14 +93,14 @@ class _DashboardShellState extends State<DashboardShell>
 
     return Scaffold(
       backgroundColor: scheme.surface,
-      // Wrap the entire body in a Stack so the header + floating nav stay
-      // visually pinned while only the page content cross-fades.
+      extendBody: true,
       body: SafeArea(
+        bottom: false,
         child: Stack(
           children: [
             // 0. Theme-aware background so dark mode gets a dark surface.
             Positioned.fill(child: ColoredBox(color: scheme.surface)),
-            // 1. Page content with cross-fade + slide transition
+            // 1. Page content with cross-fade + slide transition (scrolls under nav bar)
             Positioned.fill(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 380),
@@ -149,12 +149,12 @@ class _DashboardShellState extends State<DashboardShell>
               ),
             ),
 
-            // 3. Persistent floating bottom nav menu (always visible, including home)
+            // 3. Persistent floating bottom nav on top of content
             Positioned(
               left: 0,
               right: 0,
               bottom: 0,
-              child: FloatingNavigation(
+              child: StandardBottomNav(
                 selectedIndex: _selectedIndex,
                 onItemSelected: _selectPage,
               ),
@@ -289,10 +289,10 @@ class _PageWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       // Top: 80 (header height) + 12 gap
-      // Bottom: 80 (gooey nav) + 20 (margin) + 12 gap
+      // Bottom: 68 (nav height) + padding + extra scroll margin
       padding: EdgeInsets.only(
         top: isHome ? 92 : 88,
-        bottom: 112,
+        bottom: 100,
       ),
       child: child,
     );

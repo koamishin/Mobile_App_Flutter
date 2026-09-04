@@ -113,7 +113,6 @@ class WeeklyDaySelector extends StatelessWidget {
                       Text(
                         info['name'] as String,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: isSelected
                               ? FontWeight.w800
@@ -129,7 +128,6 @@ class WeeklyDaySelector extends StatelessWidget {
                       Text(
                         info['date'] as String,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
                           color: isSelected ? scheme.onPrimary : scheme.onSurface,
@@ -146,14 +144,13 @@ class WeeklyDaySelector extends StatelessWidget {
                         ),
                         child: Text(
                           info['indicator'] as String,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 8,
-                            fontWeight: FontWeight.w800,
-                            color: isSelected
-                                ? scheme.onPrimary
-                                : scheme.onPrimaryContainer,
-                          ),
+style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.w800,
+                          color: isSelected
+                              ? scheme.onPrimary
+                              : scheme.onPrimaryContainer,
+                        ),
                         ),
                       ),
                     ],
