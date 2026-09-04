@@ -232,7 +232,6 @@ class ProfileDrawer extends StatelessWidget {
           Text(
             userName,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 22,
               fontWeight: FontWeight.w800,
               color: scheme.onSurface,
@@ -243,7 +242,6 @@ class ProfileDrawer extends StatelessWidget {
           Text(
             userEmail,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w500,
               color: scheme.onSurfaceVariant,
@@ -259,7 +257,6 @@ class ProfileDrawer extends StatelessWidget {
             child: Text(
               userRole,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 11,
                 fontWeight: FontWeight.w800,
                 color: scheme.primary,
@@ -309,7 +306,6 @@ class ProfileDrawer extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: isDestructive ? color : scheme.onSurface,
@@ -319,7 +315,6 @@ class ProfileDrawer extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: scheme.onSurfaceVariant,

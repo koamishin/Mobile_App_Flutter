@@ -59,7 +59,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 child: Text(
                   'Weekly Timetable',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -125,7 +124,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
               '$displayHour:00\n$period',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 color: scheme.onSurfaceVariant,
@@ -182,7 +180,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 11,
                     fontWeight: isCurrentDay ? FontWeight.w800 : FontWeight.w600,
                     color: isCurrentDay
@@ -193,7 +190,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 Text(
                   date,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: isCurrentDay
@@ -274,7 +270,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 10,
                         fontWeight: FontWeight.w900,
                         color: isActive ? Colors.white : scheme.onSurface,
@@ -290,7 +285,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
                   color: isActive
@@ -301,7 +295,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
               Text(
                 schedule.startTime.format(context),
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 7.5,
                   fontWeight: FontWeight.w800,
                   color: isActive ? Colors.white : schedule.color,
@@ -365,7 +358,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                         Text(
                           schedule.subjectName,
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                             color: scheme.onSurface,
@@ -374,7 +366,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                         Text(
                           isBreak ? 'School Recess' : 'Official Course Session',
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: scheme.onSurfaceVariant,
@@ -450,7 +441,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
                   child: const Text(
                     'Close Details',
                     style: TextStyle(
-                      fontFamily: 'Poppins',
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                     ),
@@ -484,7 +474,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: scheme.onSurfaceVariant,
@@ -494,7 +483,6 @@ class WeeklyScheduleGrid extends StatelessWidget {
               Text(
                 value,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: scheme.onSurface,

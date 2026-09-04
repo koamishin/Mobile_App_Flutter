@@ -113,7 +113,6 @@ class CustomNavBar extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   color: scheme.onSurface,
@@ -128,7 +127,6 @@ class CustomNavBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: scheme.onSurfaceVariant,
@@ -195,11 +193,10 @@ class CustomNavBar extends StatelessWidget {
       child: Text(
         avatarInitial,
         style: TextStyle(
-          color: scheme.primary,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w800,
-          fontSize: 14,
-        ),
+            color: scheme.primary,
+            fontWeight: FontWeight.w800,
+            fontSize: 14,
+          ),
       ),
     );
   }

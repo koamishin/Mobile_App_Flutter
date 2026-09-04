@@ -16,23 +16,35 @@ class ScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isBreak = schedule.subjectName == 'Break Time';
+
+    // Use scaffold background for better contrast in dark mode
+    final cardColor = isActive 
+        ? schedule.color 
+        : (isDark ? scheme.surface : Colors.transparent);
+    
+    // Ensure border has enough contrast
+    final borderColor = isActive
+        ? schedule.color.withValues(alpha: isDark ? 0.7 : 0.5)
+        : (isDark ? scheme.outline.withValues(alpha: 0.5) : scheme.outlineVariant.withValues(alpha: 0.3));
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        color: cardColor,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isActive ? schedule.color : Colors.transparent,
+          color: borderColor,
           width: isActive ? 2.5 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: isActive
-                ? schedule.color.withValues(alpha: 0.32)
-                : scheme.shadow.withValues(alpha: 0.12),
+            color: (isActive 
+                ? schedule.color 
+                : (isDark ? scheme.surface : scheme.shadow))
+                .withValues(alpha: isDark ? 0.25 : 0.32),
             blurRadius: isActive ? 22 : 14,
             offset: const Offset(0, 8),
           ),
@@ -53,7 +65,7 @@ class ScheduleCard extends StatelessWidget {
                     width: 6,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: schedule.color,
+                      color: schedule.color.withValues(alpha: isDark ? 0.7 : 0.85),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -78,7 +90,7 @@ class ScheduleCard extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: schedule.color.withValues(alpha: 0.16),
+                                color: schedule.color.withValues(alpha: isDark ? 0.25 : 0.16),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
@@ -87,16 +99,15 @@ class ScheduleCard extends StatelessWidget {
                                   Icon(
                                     schedule.icon,
                                     size: 14,
-                                    color: schedule.color,
+                                    color: schedule.color.withValues(alpha: isDark ? 0.9 : 1.0),
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
                                     isBreak ? 'Break' : 'Subject',
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
                                       fontSize: 10,
                                       fontWeight: FontWeight.w800,
-                                      color: schedule.color,
+                                      color: schedule.color.withValues(alpha: isDark ? 0.9 : 1.0),
                                     ),
                                   ),
                                 ],
@@ -110,8 +121,7 @@ class ScheduleCard extends StatelessWidget {
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF27AE60)
-                                      .withValues(alpha: 0.16),
+                                  color: const Color(0xFF27AE60).withValues(alpha: isDark ? 0.25 : 0.16),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: const Row(
@@ -123,11 +133,10 @@ class ScheduleCard extends StatelessWidget {
                                     ),
                                     SizedBox(width: 4),
                                     Text(
-                                      'LIVE NOW',
+                                      'LIVE',
                                       style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.w900,
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w700,
                                         color: Color(0xFF27AE60),
                                       ),
                                     ),
@@ -141,10 +150,9 @@ class ScheduleCard extends StatelessWidget {
                         Text(
                           schedule.subjectName,
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
-                            color: scheme.onSurface,
+                            color: isActive ? Colors.white : scheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -154,32 +162,30 @@ class ScheduleCard extends StatelessWidget {
                               Icon(
                                 Icons.person_outline_rounded,
                                 size: 14,
-                                color: scheme.onSurfaceVariant,
+                                color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.teacherName,
                                 style: TextStyle(
-                                  fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: scheme.onSurfaceVariant,
+                                  color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Icon(
                                 Icons.location_on_outlined,
                                 size: 14,
-                                color: scheme.onSurfaceVariant,
+                                color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.roomNumber,
                                 style: TextStyle(
-                                  fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: scheme.onSurfaceVariant,
+                                  color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -190,16 +196,15 @@ class ScheduleCard extends StatelessWidget {
                               Icon(
                                 Icons.restaurant_rounded,
                                 size: 14,
-                                color: scheme.onSurfaceVariant,
+                                color: schedule.color.withValues(alpha: isDark ? 0.7 : 0.85),
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 schedule.roomNumber,
                                 style: TextStyle(
-                                  fontFamily: 'Poppins',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
-                                  color: scheme.onSurfaceVariant,
+                                  color: isActive ? Colors.white : scheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -210,11 +215,10 @@ class ScheduleCard extends StatelessWidget {
                           Text(
                             'Note: ${schedule.notes}',
                             style: TextStyle(
-                              fontFamily: 'Poppins',
                               fontSize: 11,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w500,
-                              color: schedule.color.withValues(alpha: 0.85),
+                              color: isActive ? Colors.white70 : schedule.color.withValues(alpha: isDark ? 0.8 : 0.85),
                             ),
                           ),
                         ]
@@ -230,26 +234,24 @@ class ScheduleCard extends StatelessWidget {
                       Text(
                         schedule.timeRangeString.split(' - ').first,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 13,
                           fontWeight: FontWeight.w800,
-                          color: scheme.onSurface,
+                          color: isActive ? Colors.white : scheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Icon(
                         Icons.arrow_downward_rounded,
                         size: 14,
-                        color: scheme.onSurfaceVariant,
+                        color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                       ),
                       const SizedBox(height: 2),
                       Text(
                         schedule.timeRangeString.split(' - ').last,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: scheme.onSurfaceVariant,
+                          color: isActive ? Colors.white70 : scheme.onSurfaceVariant,
                         ),
                       ),
                     ],

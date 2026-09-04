@@ -91,14 +91,15 @@ class _MyAppState extends State<MyApp> {
             builder: (lightDynamic, darkDynamic) {
               final dynamicAvailable =
                   lightDynamic != null || darkDynamic != null;
-              // Surface availability to the rest of the app.
-              prefs.setDynamicColorAvailable(dynamicAvailable);
+              // Schedule availability update after build cycle to prevent dirty rebuild crash.
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                prefs.setDynamicColorAvailable(dynamicAvailable);
+              });
 
               return MaterialApp(
                 themeMode: _mapThemeMode(prefs.themeMode),
                 theme: ThemeData(
                   useMaterial3: true,
-                  fontFamily: 'Emberly',
                   colorScheme: _resolveScheme(
                     lightDynamic,
                     darkDynamic,
@@ -112,7 +113,6 @@ class _MyAppState extends State<MyApp> {
                 ),
                 darkTheme: ThemeData(
                   useMaterial3: true,
-                  fontFamily: 'Emberly',
                   colorScheme: _resolveScheme(
                     lightDynamic,
                     darkDynamic,

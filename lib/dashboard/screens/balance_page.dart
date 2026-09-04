@@ -7,11 +7,12 @@ class BalancePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return StudentPageScaffold(
       title: 'Account',
       subtitle: 'Tuition fees, payment method, and recent payments.',
       icon: Icons.account_balance_wallet_rounded,
-      children: const [
+      children: [
         _TuitionSummaryCard(),
         SizedBox(height: 18),
         _PaymentMethodCard(),
@@ -19,10 +20,9 @@ class BalancePage extends StatelessWidget {
         Text(
           'Payment History',
           style: TextStyle(
-            fontFamily: 'Poppins',
             fontSize: 22,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF27364A),
+            color: scheme.onSurface,
           ),
         ),
         SizedBox(height: 12),
@@ -96,7 +96,6 @@ class _TuitionSummaryCard extends StatelessWidget {
                 child: Text(
                   'Tuition Balance',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white70,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -115,7 +114,6 @@ class _TuitionSummaryCard extends StatelessWidget {
                 child: const Text(
                   'Due soon',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     color: Colors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
@@ -128,18 +126,16 @@ class _TuitionSummaryCard extends StatelessWidget {
           const Text(
             '\$1,450.00',
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: Colors.white,
               fontSize: 42,
               fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
             'Next payment due on June 5, 2026',
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: scheme.surface,
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -167,7 +163,6 @@ class _TuitionSummaryCard extends StatelessWidget {
           Text(
             '68% of this semester paid',
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: Colors.white.withValues(alpha: 0.82),
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -212,27 +207,25 @@ class _PaymentMethodCard extends StatelessWidget {
             child: const Icon(Icons.credit_card_rounded, color: Colors.white),
           ),
           const SizedBox(width: 14),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Payment Method',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF26364A),
+                    color: scheme.onSurface,
                   ),
                 ),
                 SizedBox(height: 4),
                 Text(
                   'Visa card ending in 4821',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF66778A),
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -243,7 +236,6 @@ class _PaymentMethodCard extends StatelessWidget {
             child: const Text(
               'Change',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -255,7 +247,6 @@ class _PaymentMethodCard extends StatelessWidget {
 }
 
 const TextStyle _paidStyle = TextStyle(
-  fontFamily: 'Poppins',
   fontSize: 15,
   fontWeight: FontWeight.w900,
   color: Color(0xFF2F80ED),

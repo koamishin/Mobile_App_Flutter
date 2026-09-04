@@ -55,23 +55,21 @@ class SubjectProgressIndicator extends StatelessWidget {
                   children: [
                     Text(
                       subjectName,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800,
-                        color: scheme.onSurface,
-                      ),
+style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      color: scheme.onSurface,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      statusText,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: scheme.onSurfaceVariant,
-                      ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    statusText,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: scheme.onSurfaceVariant,
                     ),
+                  ),
                   ],
                 ),
               ),
@@ -79,7 +77,6 @@ class SubjectProgressIndicator extends StatelessWidget {
               Text(
                 '${(progress * 100).toInt()}%',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 15,
                   fontWeight: FontWeight.w900,
                   color: color,

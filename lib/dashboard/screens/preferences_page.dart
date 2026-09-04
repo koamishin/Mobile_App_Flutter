@@ -1065,7 +1065,6 @@ class _SectionHeader extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -1075,7 +1074,6 @@ class _SectionHeader extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: scheme.onSurfaceVariant,
@@ -1102,7 +1100,6 @@ class _SectionSubHeader extends StatelessWidget {
       child: Text(
         title.toUpperCase(),
         style: TextStyle(
-          fontFamily: 'Poppins',
           fontSize: 11,
           fontWeight: FontWeight.w800,
           color: scheme.onSurfaceVariant,
@@ -1168,7 +1165,6 @@ class _ThemePresetPicker extends StatelessWidget {
                     Text(
                       'Theme color',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: scheme.onSurface,
@@ -1178,7 +1174,6 @@ class _ThemePresetPicker extends StatelessWidget {
                     Text(
                       'Pick a static M3 seed color for the app',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
                         color: scheme.onSurfaceVariant,
@@ -1445,7 +1440,6 @@ class _PresetPreviewCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
                             color: selected ? preset.seed : light.onSurface,

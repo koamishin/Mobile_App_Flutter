@@ -122,7 +122,6 @@ class _SchedulePageState extends State<SchedulePage> {
                   'Daily Timeline',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: _currentTab == 0
@@ -162,7 +161,6 @@ class _SchedulePageState extends State<SchedulePage> {
                   'Weekly Timetable',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: _currentTab == 1
@@ -188,7 +186,6 @@ class _SchedulePageState extends State<SchedulePage> {
           child: Text(
             'Subject Progress',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 18,
               fontWeight: FontWeight.w800,
               color: scheme.onSurface,

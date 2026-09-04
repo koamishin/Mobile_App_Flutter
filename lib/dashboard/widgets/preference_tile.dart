@@ -77,7 +77,6 @@ class ChoicePreferenceTile<T> extends StatelessWidget {
           Text(
             valueLabel,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w700,
               color: scheme.onSurfaceVariant,
@@ -134,7 +133,6 @@ class SliderPreferenceTile extends StatelessWidget {
       trailing: Text(
         valueLabel,
         style: TextStyle(
-          fontFamily: 'Poppins',
           fontSize: 13,
           fontWeight: FontWeight.w800,
           color: scheme.primary,
@@ -196,7 +194,6 @@ class ActionPreferenceTile extends StatelessWidget {
             Text(
               trailingText!,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: scheme.onSurfaceVariant,
@@ -290,7 +287,6 @@ class _BaseTile extends StatelessWidget {
                           Text(
                             title,
                             style: TextStyle(
-                              fontFamily: 'Poppins',
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: scheme.onSurface,
@@ -301,7 +297,6 @@ class _BaseTile extends StatelessWidget {
                             Text(
                               subtitle!,
                               style: TextStyle(
-                                fontFamily: 'Poppins',
                                 fontSize: 11,
                                 fontWeight: FontWeight.w500,
                                 color: scheme.onSurfaceVariant,

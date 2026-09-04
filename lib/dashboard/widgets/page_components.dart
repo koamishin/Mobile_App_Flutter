@@ -88,7 +88,6 @@ class PageHeader extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -99,7 +98,6 @@ class PageHeader extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: scheme.onSurfaceVariant,
@@ -155,7 +153,6 @@ class MetricCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
-              fontFamily: 'Poppins',
               color: Colors.white,
               fontSize: 26,
               fontWeight: FontWeight.w800,
@@ -164,7 +161,6 @@ class MetricCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              fontFamily: 'Poppins',
               color: Colors.white.withValues(alpha: 0.86),
               fontSize: 14,
               fontWeight: FontWeight.w600,
@@ -226,7 +222,6 @@ class SoftInfoCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: scheme.onSurface,
@@ -236,7 +231,6 @@ class SoftInfoCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: scheme.onSurfaceVariant,

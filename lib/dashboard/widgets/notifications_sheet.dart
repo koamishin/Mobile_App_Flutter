@@ -231,7 +231,6 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
                     child: Text(
                       'Notifications',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                         color: scheme.onSurface,
@@ -253,7 +252,6 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
                       child: Text(
                         '$_unreadCount new',
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           color: scheme.onPrimaryContainer,
@@ -275,7 +273,6 @@ class _NotificationsSheetState extends State<NotificationsSheet> {
                     child: const Text(
                       'Mark all read',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w800,
                         fontSize: 12,
                       ),
@@ -390,7 +387,6 @@ class _FilterChipWidget extends StatelessWidget {
               Text(
                 filter.label,
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
                   color: selected
@@ -502,7 +498,6 @@ class _NotificationCard extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'Poppins',
                               fontSize: 14,
                               fontWeight: FontWeight.w800,
                               color: scheme.onSurface,
@@ -535,7 +530,6 @@ class _NotificationCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: scheme.onSurfaceVariant,
@@ -554,7 +548,6 @@ class _NotificationCard extends StatelessWidget {
                         Text(
                           _relativeTime(),
                           style: TextStyle(
-                            fontFamily: 'Poppins',
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             color: scheme.onSurfaceVariant
@@ -576,7 +569,6 @@ class _NotificationCard extends StatelessWidget {
                             child: Text(
                               notification.actionLabel!,
                               style: TextStyle(
-                                fontFamily: 'Poppins',
                                 fontSize: 10,
                                 fontWeight: FontWeight.w800,
                                 color: cat,
@@ -632,7 +624,6 @@ class _EmptyState extends StatelessWidget {
               'Nothing in $filterLabel',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
                 color: scheme.onSurface,
@@ -643,7 +634,6 @@ class _EmptyState extends StatelessWidget {
               'You\'re all caught up. New notifications will appear here.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: scheme.onSurfaceVariant,

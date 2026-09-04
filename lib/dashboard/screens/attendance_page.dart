@@ -261,6 +261,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     // Generate dates for horizontal day selector (Mon May 25 to Sat May 30)
     final weeklyDates = List.generate(
       6,
@@ -273,16 +274,14 @@ class _AttendancePageState extends State<AttendancePage> {
       icon: Icons.how_to_reg_rounded,
       children: [
         // 1. Weekly Attendance Days Navigation (Top Section)
-        const Text(
-          'Weekly Navigator',
+        Text('Weekly Navigator',
           style: TextStyle(
-            fontFamily: 'Poppins',
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF27364A),
+            color: scheme.onSurface,
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         SizedBox(
           height: 96,
           child: ListView.builder(
@@ -365,7 +364,7 @@ class _AttendancePageState extends State<AttendancePage> {
         break;
       case AttendanceStatus.noClass:
         statusIcon = Icons.calendar_today_rounded;
-        statusColor = const Color(0xFF66778A);
+        statusColor = scheme.onSurfaceVariant;
         break;
     }
 
@@ -386,18 +385,18 @@ class _AttendancePageState extends State<AttendancePage> {
             width: 74,
             decoration: BoxDecoration(
               gradient: isSelected
-                  ? const LinearGradient(
-                      colors: [Color(0xFF2F80ED), Color(0xFF6D5DFB)],
+                  ? LinearGradient(
+                      colors: [scheme.primary, scheme.tertiary],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     )
                   : null,
-              color: isSelected ? null : Colors.white.withValues(alpha: 0.88),
+              color: isSelected ? null : scheme.surface,
               borderRadius: BorderRadius.circular(22),
               boxShadow: [
                 BoxShadow(
                   color: isSelected
-                      ? const Color(0xFF6D5DFB).withValues(alpha: 0.35)
+                      ? scheme.primary.withValues(alpha: 0.35)
                       : scheme.shadow.withValues(alpha: 0.08),
                   blurRadius: isSelected ? 12 : 8,
                   offset: isSelected ? const Offset(0, 6) : const Offset(0, 4),
@@ -410,22 +409,20 @@ class _AttendancePageState extends State<AttendancePage> {
                 Text(
                   dayName,
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: isSelected
                         ? Colors.white70
-                        : const Color(0xFF66778A),
+                        : scheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${date.day}',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    color: isSelected ? Colors.white : const Color(0xFF26364A),
+                    color: isSelected ? Colors.white : scheme.onSurface,
                     height: 1.1,
                   ),
                 ),
@@ -444,19 +441,20 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildSummaryCard() {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF56CCF2), Color(0xFF2F80ED)],
+        gradient: LinearGradient(
+          colors: [scheme.primary, scheme.tertiary],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2F80ED).withValues(alpha: 0.26),
+            color: scheme.primary.withValues(alpha: 0.26),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -484,7 +482,6 @@ class _AttendancePageState extends State<AttendancePage> {
                   Text(
                     '96%',
                     style: TextStyle(
-                      fontFamily: 'Poppins',
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
@@ -493,7 +490,6 @@ class _AttendancePageState extends State<AttendancePage> {
                   Text(
                     'Rate',
                     style: TextStyle(
-                      fontFamily: 'Poppins',
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                       color: Colors.white70,
@@ -512,13 +508,12 @@ class _AttendancePageState extends State<AttendancePage> {
                 const Text(
                   'Attendance Summary',
                   style: TextStyle(
-                    fontFamily: 'Poppins',
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -549,8 +544,7 @@ class _AttendancePageState extends State<AttendancePage> {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w900,
             color: Colors.white,
@@ -560,7 +554,6 @@ class _AttendancePageState extends State<AttendancePage> {
         Text(
           label,
           style: TextStyle(
-            fontFamily: 'Poppins',
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: scheme.surface,
@@ -614,7 +607,7 @@ class _AttendancePageState extends State<AttendancePage> {
         break;
       case AttendanceStatus.noClass:
         statusText = 'NO CLASS';
-        statusColor = const Color(0xFF66778A);
+        statusColor = scheme.onSurfaceVariant;
         statusIcon = Icons.calendar_today_rounded;
         break;
     }
@@ -641,11 +634,10 @@ class _AttendancePageState extends State<AttendancePage> {
             children: [
               Text(
                 dayLabel,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF26364A),
+                  color: scheme.onSurface,
                 ),
               ),
               Container(
@@ -665,7 +657,6 @@ class _AttendancePageState extends State<AttendancePage> {
                     Text(
                       statusText,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                         color: statusColor,
@@ -679,72 +670,69 @@ class _AttendancePageState extends State<AttendancePage> {
           const SizedBox(height: 14),
           Text(
             'Date: May ${_selectedDate.day}, 2026',
-            style: const TextStyle(
-              fontFamily: 'Poppins',
+            style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF66778A),
+              color: scheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              _buildDetailInfoCol('Time In', record.checkInTime),
+              _buildDetailInfoCol('Time In', record.checkInTime, scheme),
               const SizedBox(width: 32),
               _buildDetailInfoCol(
                 'Remarks',
                 record.remarks.isNotEmpty ? record.remarks : 'None',
+                scheme,
               ),
             ],
           ),
           if (record.classes.isNotEmpty) ...[
-            const SizedBox(height: 18),
-            const Divider(height: 1, thickness: 1, color: Color(0xFFEAF0F6)),
-            const SizedBox(height: 14),
-            const Text(
+            SizedBox(height: 18),
+            Divider(height: 1, thickness: 1, color: scheme.outlineVariant),
+            SizedBox(height: 14),
+            Text(
               'Class Breakdown',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
-                color: Color(0xFF26364A),
+                color: scheme.onSurface,
               ),
             ),
-            const SizedBox(height: 8),
-            ...record.classes.map((cls) => _buildClassBreakdownRow(cls)),
+            SizedBox(height: 8),
+            ...record.classes.map((cls) => _buildClassBreakdownRow(cls, scheme)),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildDetailInfoCol(String label, String value) {
+  Widget _buildDetailInfoCol(String label, String value, ColorScheme scheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF9AA7B6),
+            color: scheme.onSurfaceVariant,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontFamily: 'Poppins',
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF26364A),
+            color: scheme.onSurface,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildClassBreakdownRow(ClassCheckIn cls) {
+  Widget _buildClassBreakdownRow(ClassCheckIn cls, ColorScheme scheme) {
     Color checkColor = const Color(0xFF27AE60);
     IconData checkIcon = Icons.check_circle_rounded;
 
@@ -758,7 +746,7 @@ class _AttendancePageState extends State<AttendancePage> {
       checkColor = const Color(0xFF2F80ED);
       checkIcon = Icons.info_rounded;
     } else if (cls.isUpcoming) {
-      checkColor = const Color(0xFF66778A);
+      checkColor = scheme.onSurfaceVariant;
       checkIcon = Icons.schedule_rounded;
     }
 
@@ -766,9 +754,9 @@ class _AttendancePageState extends State<AttendancePage> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFEAF0F6), width: 1),
+        border: Border.all(color: scheme.outlineVariant, width: 1),
       ),
       child: Row(
         children: [
@@ -777,21 +765,19 @@ class _AttendancePageState extends State<AttendancePage> {
           Expanded(
             child: Text(
               cls.className,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
+              style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF26364A),
+                color: scheme.onSurface,
               ),
             ),
           ),
           Text(
             cls.isUpcoming ? cls.time : '${cls.status} - ${cls.time}',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: cls.isUpcoming ? const Color(0xFF66778A) : checkColor,
+              color: cls.isUpcoming ? scheme.onSurfaceVariant : checkColor,
             ),
           ),
         ],
@@ -818,23 +804,22 @@ class _AttendancePageState extends State<AttendancePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Subject Attendance',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF26364A),
+              color: scheme.onSurface,
             ),
           ),
-          const SizedBox(height: 14),
-          ..._subjectAttendance.map((sub) => _buildSubjectProgressItem(sub)),
+          SizedBox(height: 14),
+          ..._subjectAttendance.map((sub) => _buildSubjectProgressItem(sub, scheme)),
         ],
       ),
     );
   }
 
-  Widget _buildSubjectProgressItem(SubjectAttendance sub) {
+  Widget _buildSubjectProgressItem(SubjectAttendance sub, ColorScheme scheme) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Column(
@@ -844,17 +829,15 @@ class _AttendancePageState extends State<AttendancePage> {
             children: [
               Text(
                 sub.subjectName,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
+                style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF26364A),
+                  color: scheme.onSurface,
                 ),
               ),
               Text(
                 '${sub.percentage}%',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: sub.color,
@@ -867,7 +850,7 @@ class _AttendancePageState extends State<AttendancePage> {
             height: 8,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: const Color(0xFFEAF0F6),
+              color: scheme.outlineVariant,
               borderRadius: BorderRadius.circular(10),
             ),
             child: FractionallySizedBox(
@@ -907,30 +890,28 @@ class _AttendancePageState extends State<AttendancePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Attendance Calendar',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF26364A),
+                  color: scheme.onSurface,
                 ),
               ),
               Text(
                 'May 2026',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF2F80ED),
+                  color: scheme.primary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           // Calendar Grid Header (Weekdays)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -940,11 +921,10 @@ class _AttendancePageState extends State<AttendancePage> {
                 child: Text(
                   day,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Poppins',
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF9AA7B6),
+                    color: scheme.onSurfaceVariant,
                   ),
                 ),
               );
@@ -959,6 +939,7 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 
   Widget _buildMayCalendarGrid() {
+    final scheme = Theme.of(context).colorScheme;
     // May 1, 2026 is a Friday.
     // Standard calendar grid construction for May 2026.
     // Total cells = 35 (5 rows of 7 days)
@@ -975,13 +956,13 @@ class _AttendancePageState extends State<AttendancePage> {
       final date = DateTime(2026, 5, day);
       final record = _attendanceRecords[date];
 
-      cells.add(_buildCalendarCell(day, date, record));
+      cells.add(_buildCalendarCell(day, date, record, scheme));
     }
 
     // Fill remaining cells to make a full 7x5 or 7x6 grid
     final remaining = 42 - cells.length;
     for (int i = 0; i < remaining; i++) {
-      cells.add(const SizedBox(width: 38, height: 44));
+      cells.add(SizedBox(width: 38, height: 44));
     }
 
     return Wrap(
@@ -991,7 +972,7 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Widget _buildCalendarCell(int day, DateTime date, AttendanceRecord? record) {
+  Widget _buildCalendarCell(int day, DateTime date, AttendanceRecord? record, ColorScheme scheme) {
     final isSelected =
         date.day == _selectedDate.day && date.month == _selectedDate.month;
 
@@ -1026,12 +1007,12 @@ class _AttendancePageState extends State<AttendancePage> {
         width: 38,
         height: 44,
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2F80ED) : null,
+          color: isSelected ? scheme.primary : null,
           shape: BoxShape.circle,
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFF2F80ED).withValues(alpha: 0.35),
+                    color: scheme.primary.withValues(alpha: 0.35),
                     blurRadius: 6,
                     offset: const Offset(0, 3),
                   ),
@@ -1044,10 +1025,9 @@ class _AttendancePageState extends State<AttendancePage> {
             Text(
               '$day',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
-                color: isSelected ? Colors.white : const Color(0xFF26364A),
+                color: isSelected ? Colors.white : scheme.onSurface,
               ),
             ),
             const SizedBox(height: 3),
@@ -1096,26 +1076,25 @@ class _AttendancePageState extends State<AttendancePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Attendance Logs',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF26364A),
+              color: scheme.onSurface,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           ...historyDates.map((date) {
             final rec = _attendanceRecords[date]!;
-            return _buildHistoryItem(date, rec);
+            return _buildHistoryItem(date, rec, scheme);
           }),
         ],
       ),
     );
   }
 
-  Widget _buildHistoryItem(DateTime date, AttendanceRecord record) {
+  Widget _buildHistoryItem(DateTime date, AttendanceRecord record, ColorScheme scheme) {
     final months = [
       'Jan',
       'Feb',
@@ -1134,42 +1113,37 @@ class _AttendancePageState extends State<AttendancePage> {
 
     String statusText;
     Color statusColor;
-    Color statusBg;
     switch (record.status) {
       case AttendanceStatus.present:
         statusText = 'Present';
         statusColor = const Color(0xFF27AE60);
-        statusBg = const Color(0xFFEBF7EE);
         break;
       case AttendanceStatus.absent:
         statusText = 'Absent';
         statusColor = const Color(0xFFEB5757);
-        statusBg = const Color(0xFFFDF0F0);
         break;
       case AttendanceStatus.late:
         statusText = 'Late';
         statusColor = const Color(0xFFFF8E53);
-        statusBg = const Color(0xFFFFF4EB);
         break;
       case AttendanceStatus.excused:
         statusText = 'Excused';
         statusColor = const Color(0xFF2F80ED);
-        statusBg = const Color(0xFFEFF5FE);
         break;
       case AttendanceStatus.noClass:
         statusText = 'No Class';
-        statusColor = const Color(0xFF66778A);
-        statusBg = const Color(0xFFF1F4F8);
+        statusColor = scheme.onSurfaceVariant;
         break;
     }
+    final statusBg = statusColor.withValues(alpha: 0.12);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFEAF0F6), width: 1),
+        border: Border.all(color: scheme.outlineVariant, width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1180,12 +1154,12 @@ class _AttendancePageState extends State<AttendancePage> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE7F4FF),
+                  color: scheme.primaryContainer,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.receipt_long_rounded,
-                  color: Color(0xFF2F80ED),
+                  color: scheme.onPrimaryContainer,
                   size: 18,
                 ),
               ),
@@ -1195,22 +1169,20 @@ class _AttendancePageState extends State<AttendancePage> {
                 children: [
                   Text(
                     dateLabel,
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
+                    style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF26364A),
+                      color: scheme.onSurface,
                     ),
                   ),
                   Text(
                     record.remarks.isNotEmpty
                         ? record.remarks
                         : 'Daily log checked',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
+                    style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF66778A),
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -1226,7 +1198,6 @@ class _AttendancePageState extends State<AttendancePage> {
             child: Text(
               statusText,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 11,
                 fontWeight: FontWeight.w800,
                 color: statusColor,
@@ -1257,22 +1228,21 @@ class _AttendancePageState extends State<AttendancePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'This Month Analytics',
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF26364A),
+              color: scheme.onSurface,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildMonthlyStatBox('Present', '20', const Color(0xFF27AE60)),
-              _buildMonthlyStatBox('Absent', '1', const Color(0xFFEB5757)),
-              _buildMonthlyStatBox('Late', '0', const Color(0xFFFF8E53)),
+              _buildMonthlyStatBox('Present', '20', const Color(0xFF27AE60), scheme),
+              _buildMonthlyStatBox('Absent', '1', const Color(0xFFEB5757), scheme),
+              _buildMonthlyStatBox('Late', '0', const Color(0xFFFF8E53), scheme),
             ],
           ),
         ],
@@ -1280,22 +1250,21 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Widget _buildMonthlyStatBox(String label, String value, Color color) {
+  Widget _buildMonthlyStatBox(String label, String value, Color color, ColorScheme scheme) {
     return Expanded(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.5),
+          color: scheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFEAF0F6), width: 1),
+          border: Border.all(color: scheme.outlineVariant, width: 1),
         ),
         child: Column(
           children: [
             Text(
               value,
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 22,
                 fontWeight: FontWeight.w900,
                 color: color,
@@ -1305,11 +1274,10 @@ class _AttendancePageState extends State<AttendancePage> {
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
+              style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF66778A),
+                color: scheme.onSurfaceVariant,
               ),
             ),
           ],

@@ -70,7 +70,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
             child: Text(
               'Current Session',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
                 color: scheme.onSurface,
@@ -112,15 +111,15 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2F80ED), Color(0xFF5DAEFF)],
+          gradient: LinearGradient(
+            colors: [current.color, current.color.withValues(alpha: 0.7)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF2F80ED).withValues(alpha: 0.35),
+              color: current.color.withValues(alpha: 0.35),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
@@ -140,19 +139,19 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                       Container(
                         width: 10,
                         height: 10,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF27AE60),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF27AE60),
                           shape: BoxShape.circle,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
+                      Text(
                         'LIVE NOW',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -167,7 +166,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                     child: Text(
                       countdownText,
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: Colors.white,
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
@@ -181,7 +179,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
               Text(
                 current.subjectName,
                 style: const TextStyle(
-                  fontFamily: 'Poppins',
                   color: Colors.white,
                   fontSize: 26,
                   fontWeight: FontWeight.w900,
@@ -198,7 +195,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                     child: Text(
                       '${current.teacherName} • ${current.roomNumber}',
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: Colors.white70,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -215,7 +211,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                   Text(
                     current.timeRangeString,
                     style: const TextStyle(
-                      fontFamily: 'Poppins',
                       color: Colors.white70,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -250,7 +245,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                           const Text(
                             'UP NEXT',
                             style: TextStyle(
-                              fontFamily: 'Poppins',
                               color: Colors.white70,
                               fontSize: 9,
                               fontWeight: FontWeight.w800,
@@ -259,7 +253,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                           Text(
                             '${upcoming.subjectName} in ${upcoming.roomNumber}',
                             style: const TextStyle(
-                              fontFamily: 'Poppins',
                               color: Colors.white,
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
@@ -271,7 +264,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                     Text(
                       upcoming.startTime.format(context),
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
@@ -318,7 +310,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                   child: Text(
                     'SCHOOL SESSIONS DONE',
                     style: TextStyle(
-                      fontFamily: 'Poppins',
                       color: scheme.onPrimaryContainer,
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
@@ -331,7 +322,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
             Text(
               'No Active Classes Right Now',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 color: scheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -341,7 +331,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
             Text(
               'All classes for today are complete. Rest up and prepare for your next sessions.',
               style: TextStyle(
-                fontFamily: 'Poppins',
                 color: scheme.onSurfaceVariant,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
@@ -369,7 +358,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                       Text(
                         'NEXT UPCOMING SESSION',
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           color: scheme.onSurfaceVariant,
                           fontSize: 9,
                           fontWeight: FontWeight.w800,
@@ -378,7 +366,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                       Text(
                         '${upcoming.subjectName} (${upcoming.roomNumber})',
                         style: TextStyle(
-                          fontFamily: 'Poppins',
                           color: scheme.onSurface,
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -393,7 +380,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                     Text(
                       upcoming.startTime.format(context),
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         color: upcoming.color,
                         fontSize: 13,
                         fontWeight: FontWeight.w900,
@@ -402,7 +388,6 @@ class _CurrentClassCardState extends State<CurrentClassCard> with SingleTickerPr
                     Text(
                       'Tomorrow',
                       style: TextStyle(
-                        fontFamily: 'Poppins',
                         color: scheme.onSurfaceVariant,
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
